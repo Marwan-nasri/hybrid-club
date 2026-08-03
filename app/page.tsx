@@ -17,6 +17,15 @@ export default async function Home() {
         .maybeSingle()
     : { data: null };
 
+  const { data: programme } = profil?.onboarding_completed
+    ? await supabase
+        .from("programs")
+        .select("program_json, generated_at")
+        .eq("user_id", data!.claims.sub)
+        .eq("status", "active")
+        .maybeSingle()
+    : { data: null };
+
   return (
     <div className="flex min-h-dvh flex-col bg-white font-sans dark:bg-black">
       <header className="flex w-full items-center justify-between gap-3 border-b border-black/10 px-5 py-3 text-sm dark:border-white/15">
@@ -53,13 +62,29 @@ export default async function Home() {
             Connecte-toi pour rejoindre le club.
           </p>
         ) : profil?.onboarding_completed ? (
-          <p className="text-lg">
-            Bienvenue, membre n°
-            <strong className="font-semibold">
-              {profil.member_number ?? "—"}
-            </strong>
-            . Ton programme arrive.
-          </p>
+          <>
+            <p className="text-lg">
+              Bienvenue, membre n°
+              <strong className="font-semibold">
+                {profil.member_number ?? "—"}
+              </strong>
+              .
+            </p>
+            {programme ? (
+              // Placeholder jusqu'au dashboard (étape 4) : de quoi vérifier
+              // que le programme est bien en base et lisible.
+              <p className="opacity-80">
+                Ton programme est prêt :{" "}
+                {programme.program_json.sessions.length} séances,{" "}
+                {programme.program_json.weekly_schedule.length} jours par
+                semaine, sur {programme.program_json.meta.weeks} semaines.
+              </p>
+            ) : (
+              <Link href="/generation" className="font-medium underline">
+                Générer mon programme
+              </Link>
+            )}
+          </>
         ) : (
           <Link href="/onboarding" className="font-medium underline">
             Termine ton profil pour rejoindre le club

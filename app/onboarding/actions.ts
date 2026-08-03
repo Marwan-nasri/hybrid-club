@@ -65,5 +65,5 @@ export async function enregistrerProfil(
     return "Ton profil est introuvable. Déconnecte-toi puis reconnecte-toi.";
   }
 
-  redirect("/");
+  redirect("/generation");
 }

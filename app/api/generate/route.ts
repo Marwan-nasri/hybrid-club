@@ -70,6 +70,13 @@ export async function POST() {
     valid_until: valideJusqu.toISOString().slice(0, 10),
   });
 
+  // 23505 = violation de `one_active_program_per_user` : deux requêtes ont
+  // passé la vérification plus haut en même temps. L'autre a gagné, le membre
+  // a bien son programme.
+  if (error?.code === "23505") {
+    return NextResponse.json({ ok: true, deja_genere: true });
+  }
+
   if (error) {
     console.error("[generate] échec de l'insertion", error);
     return NextResponse.json(
