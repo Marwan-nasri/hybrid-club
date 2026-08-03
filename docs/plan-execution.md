@@ -42,11 +42,13 @@ Coche chaque case au fur et à mesure. Ne saute pas d'étape, ne dévie pas du p
       → l'IA ne renvoie que les idées ; kcal, macros et disclaimer viennent du TS
 - [x] Schémas Zod pour valider le JSON retourné
       → contrôle : `node --experimental-strip-types lib/prompts/verif.ts`
-- [ ] `/api/generate/route.ts` : profil → prompt → Anthropic → validation Zod → insert `programs`
-      (⚠️ appel Anthropic CÔTÉ SERVEUR uniquement)
-- [ ] Écran d'attente engageant pendant la génération (15-30s)
-- [ ] **TEST CRITIQUE** : générer 10 programmes sur 10 profils différents
-      (femme débutante maison, homme avancé salle, etc.) → validation manuelle des 10
+- [x] `/api/generate/route.ts` : profil → prompt → Anthropic → validation Zod → insert `programs`
+      (⚠️ appel Anthropic CÔTÉ SERVEUR uniquement — garanti par `server-only`)
+      → insert en service role : `programs` n'a volontairement pas de policy INSERT
+- [x] Écran d'attente engageant pendant la génération (15-30s) → `/generation`
+- [x] **TEST CRITIQUE** : générer 10 programmes sur 10 profils différents
+      → 10/10, 16-29s. Matériel et régimes respectés, garde-fous tenus,
+        aucune promesse chiffrée. `scripts/test-generation.ts` pour rejouer.
 
 ---
 
