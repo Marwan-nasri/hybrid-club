@@ -51,23 +51,50 @@ export const SchemaProgramme = z
       days_per_week: z.number().int().min(2).max(6),
     }),
     sessions: z.array(Seance).min(2).max(6),
-    weekly_schedule: z.partialRecord(z.enum(JOURS), z.string()),
+    // Un tableau, pas un objet jour -> séance : les objets à clés dynamiques
+    // ne survivent pas à la conversion en JSON Schema pour les structured
+    // outputs (la contrainte sur les clés est perdue et il ne reste qu'un
+    // objet vide autorisé).
+    weekly_schedule: z
+      .array(
+        z.strictObject({
+          jour: z.enum(JOURS),
+          seance_key: z.string(),
+        }),
+      )
+      .min(2)
+      .max(6),
   })
-  // Le planning ne peut pas pointer vers une séance qui n'existe pas, et il doit
-  // placer exactement le nombre de séances demandé : deux erreurs qu'un JSON
-  // syntaxiquement valide peut contenir, donc on les vérifie ici.
   .refine(
     (p) =>
-      Object.values(p.weekly_schedule).every((cle) =>
-        p.sessions.some((s) => s.key === cle),
+      new Set(p.weekly_schedule.map((j) => j.jour)).size ===
+      p.weekly_schedule.length,
+    { message: "Le même jour est programmé deux fois." },
+  )
+  // Erreurs qu'un JSON syntaxiquement valide peut parfaitement contenir.
+  .refine(
+    (p) =>
+      p.weekly_schedule.every((j) =>
+        p.sessions.some((s) => s.key === j.seance_key),
       ),
     { message: "Le planning référence une séance inexistante." },
   )
   .refine(
+    (p) => p.weekly_schedule.length === p.meta.days_per_week,
+    {
+      message:
+        "Le planning ne place pas exactement days_per_week jours d'entraînement.",
+    },
+  )
+  // Une séance définie mais jamais placée dans la semaine, c'est du contenu
+  // que le membre ne verra jamais. (Le nombre de séances distinctes, lui, est
+  // libre : un split A/B sur 4 jours est la structure normale.)
+  .refine(
     (p) =>
-      Object.keys(p.weekly_schedule).length === p.meta.days_per_week &&
-      p.sessions.length === p.meta.days_per_week,
-    { message: "Le nombre de séances ne correspond pas à days_per_week." },
+      p.sessions.every((s) =>
+        p.weekly_schedule.some((j) => j.seance_key === s.key),
+      ),
+    { message: "Une séance définie n'apparaît jamais dans le planning." },
   );
 
 export type Programme = z.infer<typeof SchemaProgramme>;
@@ -93,8 +120,11 @@ PROFIL
 - Disponibilité : ${profil.days_per_week} séances par semaine
 
 CONTRAINTES
-- Exactement ${profil.days_per_week} séances, une par jour d'entraînement, réparties dans la semaine
-  avec au moins un jour de repos entre deux séances qui sollicitent les mêmes groupes musculaires.
+- Le planning place exactement ${profil.days_per_week} jours d'entraînement dans la semaine.
+- Tu définis 2 à 4 séances distinctes et tu les répètes : un split (haut/bas, push/pull/jambes)
+  est la structure normale. Une même séance peut revenir plusieurs fois dans la semaine.
+- Chaque séance que tu définis doit apparaître au moins une fois dans le planning.
+- Au moins un jour de repos entre deux séances qui sollicitent les mêmes groupes musculaires.
 - Programme sur 5 semaines.
 - Chaque séance a une clé "seance_A", "seance_B", … dans l'ordre.
 - Mélange muscu et cardio ("hybride") : au moins une séance de type "cardio" dès que
@@ -124,8 +154,14 @@ FORMAT DE SORTIE (JSON strict, exactement ces clés)
       "blocks": [ { "format": "EMOM 20min", "content": "Minute paire : 12 kettlebell swings. Minute impaire : 200m course." } ]
     }
   ],
-  "weekly_schedule": { "lundi": "seance_A", "mercredi": "seance_B" }
+  "weekly_schedule": [
+    { "jour": "lundi", "seance_key": "seance_A" },
+    { "jour": "mardi", "seance_key": "seance_B" },
+    { "jour": "jeudi", "seance_key": "seance_A" },
+    { "jour": "vendredi", "seance_key": "seance_B" }
+  ]
 }
 
-Les jours autorisés dans "weekly_schedule" : ${JOURS.join(", ")}.`;
+"weekly_schedule" contient exactement ${profil.days_per_week} entrées, un jour ne peut apparaître
+qu'une seule fois, et les jours autorisés sont : ${JOURS.join(", ")}.`;
 }

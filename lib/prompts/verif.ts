@@ -67,7 +67,10 @@ const seanceCardio = {
 const programme = {
   meta: { goal: "recomposition", weeks: 5, days_per_week: 2 },
   sessions: [seanceMuscu, seanceCardio],
-  weekly_schedule: { lundi: "seance_A", jeudi: "seance_B" },
+  weekly_schedule: [
+    { jour: "lundi", seance_key: "seance_A" },
+    { jour: "jeudi", seance_key: "seance_B" },
+  ],
 };
 
 verifier(
@@ -79,18 +82,64 @@ verifier(
 verifier(
   !SchemaProgramme.safeParse({
     ...programme,
-    weekly_schedule: { lundi: "seance_A", jeudi: "seance_Z" },
+    weekly_schedule: [
+      { jour: "lundi", seance_key: "seance_A" },
+      { jour: "jeudi", seance_key: "seance_Z" },
+    ],
   }).success,
   "planning vers une séance inexistante accepté",
 );
 
-// Le membre a demandé 4 séances, l'IA en a produit 2.
+// Le cas qui a fait échouer les 10 premières générations : un split A/B placé
+// deux fois chacun sur 4 jours. C'est la structure NORMALE d'un programme,
+// elle doit passer — le nombre de séances distinctes n'a pas à égaler
+// days_per_week.
+verifier(
+  SchemaProgramme.safeParse({
+    meta: { goal: "masse", weeks: 5, days_per_week: 4 },
+    sessions: [seanceMuscu, seanceCardio],
+    weekly_schedule: [
+      { jour: "lundi", seance_key: "seance_A" },
+      { jour: "mardi", seance_key: "seance_B" },
+      { jour: "jeudi", seance_key: "seance_A" },
+      { jour: "vendredi", seance_key: "seance_B" },
+    ],
+  }).success,
+  "un split A/B sur 4 jours est rejeté",
+);
+
+// Le planning ne place pas le nombre de jours demandé.
 verifier(
   !SchemaProgramme.safeParse({
     ...programme,
     meta: { ...programme.meta, days_per_week: 4 },
   }).success,
-  "nombre de séances incohérent avec days_per_week accepté",
+  "planning à 2 jours accepté alors que days_per_week vaut 4",
+);
+
+// Une séance définie mais jamais placée : du contenu invisible pour le membre.
+verifier(
+  !SchemaProgramme.safeParse({
+    ...programme,
+    // seance_B est définie mais le planning ne place que seance_A.
+    weekly_schedule: [
+      { jour: "lundi", seance_key: "seance_A" },
+      { jour: "jeudi", seance_key: "seance_A" },
+    ],
+  }).success,
+  "séance jamais placée dans le planning acceptée",
+);
+
+// Deux séances le même jour : impossible à afficher sur le dashboard.
+verifier(
+  !SchemaProgramme.safeParse({
+    ...programme,
+    weekly_schedule: [
+      { jour: "lundi", seance_key: "seance_A" },
+      { jour: "lundi", seance_key: "seance_B" },
+    ],
+  }).success,
+  "même jour programmé deux fois accepté",
 );
 
 // Une séance muscu qui renvoie des blocs de cardio (ou l'inverse).
@@ -106,7 +155,10 @@ verifier(
 verifier(
   !SchemaProgramme.safeParse({
     ...programme,
-    weekly_schedule: { lundy: "seance_A", jeudi: "seance_B" },
+    weekly_schedule: [
+      { jour: "lundy", seance_key: "seance_A" },
+      { jour: "jeudi", seance_key: "seance_B" },
+    ],
   }).success,
   "jour de la semaine invalide accepté",
 );

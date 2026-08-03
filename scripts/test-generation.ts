@@ -76,8 +76,8 @@ for (const [index, { nom, profil }] of PROFILS.entries()) {
     }
 
     console.log(
-      `\nPLANNING : ${Object.entries(program_json.weekly_schedule)
-        .map(([jour, cle]) => `${jour} → ${cle}`)
+      `\nPLANNING : ${program_json.weekly_schedule
+        .map((j) => `${j.jour} → ${j.seance_key}`)
         .join(" · ")}`,
     );
 

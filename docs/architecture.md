@@ -85,8 +85,19 @@ Le prompt Anthropic doit retourner STRICTEMENT ce format (validé avec Zod avant
       ]
     }
   ],
-  "weekly_schedule": { "lundi": "seance_A", "mercredi": "seance_B" }
+  "weekly_schedule": [
+    { "jour": "lundi", "seance_key": "seance_A" },
+    { "jour": "mardi", "seance_key": "seance_B" },
+    { "jour": "jeudi", "seance_key": "seance_A" },
+    { "jour": "vendredi", "seance_key": "seance_B" }
+  ]
 }
+
+`weekly_schedule` est un tableau et non un objet jour → séance : les objets à clés
+dynamiques perdent leur contrainte de clés à la conversion en JSON Schema, et les
+structured outputs de l'API n'autorisent alors plus aucune clé (le modèle ne peut
+produire qu'un objet vide). Une même séance peut revenir plusieurs fois dans la
+semaine — un split A/B sur 4 jours, c'est 2 séances et 4 entrées de planning.
 
 Nutrition :
 
