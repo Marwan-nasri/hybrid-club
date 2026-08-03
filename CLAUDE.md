@@ -18,7 +18,8 @@ Docs de référence dans `docs/` — les consulter en cas de doute :
 - **Next.js 14+ (App Router)** + TypeScript
 - **Tailwind CSS** pour le style
 - **Supabase** (Postgres + Auth + RLS, région EU/Francfort) — `@supabase/ssr`
-- **API Anthropic** (claude-sonnet-4-6) pour la génération
+- **API Anthropic** (claude-sonnet-5) pour la génération — supporte les structured
+  outputs, donc le JSON est contraint côté API avant même la validation Zod
 - **Stripe** (Checkout + Customer Portal + Webhooks) pour les abonnements
 - **Resend** ou **Brevo** pour les emails
 - **Vercel** pour l'hébergement

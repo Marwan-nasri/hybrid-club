@@ -9,7 +9,7 @@
 | Base de données | **Supabase (région EU — Francfort)** | Postgres + Auth + Row Level Security, RGPD-friendly |
 | Auth | **Supabase Auth** (email/password) | Intégré, gratuit, gère les sessions |
 | Paiement | **Stripe** (Checkout + Customer Portal + Webhooks) | Abonnements mensuel/annuel + offre fondateur |
-| IA | **API Anthropic** (claude-sonnet-4-6) | Génération des programmes et cadres nutrition |
+| IA | **API Anthropic** (claude-sonnet-5) | Génération des programmes et cadres nutrition |
 | Emails | **Resend** ou **Brevo** | Transactionnels + campagnes |
 | Hébergement | **Vercel** | Deploy automatique depuis GitHub |
 | PWA | **next-pwa** ou manifest manuel | Installation écran d'accueil |

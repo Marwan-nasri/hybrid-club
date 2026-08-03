@@ -35,10 +35,13 @@ Coche chaque case au fur et à mesure. Ne saute pas d'étape, ne dévie pas du p
 - [x] **TEST** : compléter l'onboarding → profil rempli + numéro de membre attribué
 
 ### Étape 3 — Moteur de génération (3-4 jours) ⚠️ LE MORCEAU CRITIQUE
-- [ ] `lib/nutrition.ts` : calcul calories/macros (Mifflin-St Jeor + facteurs + objectifs + garde-fous)
-- [ ] `lib/prompts/program-generation.ts` : prompt programme
-- [ ] `lib/prompts/nutrition-generation.ts` : prompt repas
-- [ ] Schémas Zod pour valider le JSON retourné
+- [x] `lib/nutrition.ts` : calcul calories/macros (Mifflin-St Jeor + facteurs + objectifs + garde-fous)
+      → contrôle : `node --experimental-strip-types lib/nutrition.ts`
+- [x] `lib/prompts/program-generation.ts` : prompt programme
+- [x] `lib/prompts/nutrition-generation.ts` : prompt repas
+      → l'IA ne renvoie que les idées ; kcal, macros et disclaimer viennent du TS
+- [x] Schémas Zod pour valider le JSON retourné
+      → contrôle : `node --experimental-strip-types lib/prompts/verif.ts`
 - [ ] `/api/generate/route.ts` : profil → prompt → Anthropic → validation Zod → insert `programs`
       (⚠️ appel Anthropic CÔTÉ SERVEUR uniquement)
 - [ ] Écran d'attente engageant pendant la génération (15-30s)
