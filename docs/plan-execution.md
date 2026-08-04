@@ -88,7 +88,9 @@ Coche chaque case au fur et à mesure. Ne saute pas d'étape, ne dévie pas du p
 
 ### Étape 8 — Légal + RGPD (1 jour)
 - [ ] Pages mentions légales + confidentialité
-- [ ] /compte : export données (JSON) + suppression compte (cascade)
+- [x] /compte : export données (JSON) + suppression compte (cascade)
+      → cascade vérifiée : profiles, programs, workout_logs et subscriptions
+        tombent tous à 0 après suppression de l'utilisateur
 - [ ] Checkbox consentement à l'inscription
 - [ ] Analytics sans cookies
 

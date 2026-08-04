@@ -7,6 +7,7 @@ const ONGLETS = [
   { href: "/dashboard", libelle: "Aujourd'hui" },
   { href: "/programme", libelle: "Programme" },
   { href: "/nutrition", libelle: "Nutrition" },
+  { href: "/compte", libelle: "Compte" },
 ];
 
 export default function Nav() {
