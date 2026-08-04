@@ -71,8 +71,10 @@ function messageInscription(code: string | undefined, message: string) {
       return "Cette adresse email n'est pas valide.";
     case "over_email_send_rate_limit":
     case "over_request_rate_limit":
-      // Surtout ne pas dire « réessaie » : chaque tentative repousse le déblocage.
-      return "Trop de tentatives d'inscription. Attends une heure avant de réessayer.";
+      // Surtout ne pas dire « réessaie » : chaque tentative repousse le
+      // déblocage. Et Supabase vérifie cette limite AVANT de constater qu'un
+      // compte existe déjà, donc on renvoie aussi vers la connexion.
+      return "Trop de tentatives d'inscription. Si tu as déjà un compte, utilise l'onglet « Se connecter ». Sinon, attends une heure.";
   }
   // Sans code connu, on retombe sur le texte du message.
   if (/already registered|already exists/i.test(message)) {
