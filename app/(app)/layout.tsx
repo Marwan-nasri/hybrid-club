@@ -21,9 +21,12 @@ export default async function LayoutApp({
   if (!profil?.onboarding_completed) redirect("/onboarding");
 
   return (
-    <div className="flex min-h-dvh flex-col bg-white dark:bg-black">
-      {/* pb-20 : la barre du bas est fixe, sans ça elle recouvre le contenu. */}
-      <div className="flex-1 pb-20">{children}</div>
+    <div className="flex min-h-dvh flex-col">
+      {/* La barre du bas est fixe : sans cette réserve elle recouvre le
+          contenu, et sur iPhone la zone du bas est encore plus haute. */}
+      <div className="flex-1 pb-[calc(6rem+env(safe-area-inset-bottom))]">
+        {children}
+      </div>
       <Nav />
     </div>
   );

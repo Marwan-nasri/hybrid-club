@@ -35,6 +35,21 @@ export function trouverSeance(programme: Programme, cle: string) {
 }
 
 /** Les jours où cette séance revient dans la semaine. */
+/**
+ * Durée approximative d'une séance de muscu, en minutes, arrondie à 5.
+ * On compte le repos annoncé plus 45s de travail par série — c'est une
+ * estimation affichée comme telle, pas une promesse.
+ * `null` pour le cardio : le format du bloc annonce déjà sa durée.
+ */
+export function dureeEstimeeMin(seance: Seance) {
+  if (seance.type === "cardio") return null;
+  const secondes = seance.exercises.reduce(
+    (total, e) => total + e.sets * (e.rest_sec + 45),
+    0,
+  );
+  return Math.max(5, Math.round(secondes / 60 / 5) * 5);
+}
+
 export function joursDeLaSeance(programme: Programme, cle: string) {
   return programme.weekly_schedule
     .filter((j) => j.seance_key === cle)

@@ -3,8 +3,8 @@
 import { useActionState } from "react";
 import { enregistrerProfil, type EtatOnboarding } from "./actions";
 
-const champ =
-  "rounded-lg border border-black/15 bg-transparent px-3 py-3 text-base outline-none focus:border-black/50 dark:border-white/20 dark:focus:border-white/60";
+// h-14 : ce formulaire se remplit au pouce, sur téléphone.
+const champ = "champ h-14 px-4 text-base";
 
 function Champ({
   label: intitule,
@@ -16,10 +16,10 @@ function Champ({
   children: React.ReactNode;
 }) {
   return (
-    <label className="flex flex-col gap-1.5">
-      <span className="text-sm font-medium">{intitule}</span>
+    <label className="flex flex-col gap-2">
+      <span className="surtitre">{intitule}</span>
       {children}
-      {aide && <span className="text-xs opacity-60">{aide}</span>}
+      {aide && <span className="text-xs text-attenue">{aide}</span>}
     </label>
   );
 }
@@ -31,14 +31,15 @@ export default function Formulaire() {
   );
 
   return (
-    <main className="mx-auto flex w-full max-w-sm flex-col px-5 py-10">
-      <h1 className="text-2xl font-semibold">On fait connaissance</h1>
-      <p className="mt-1 text-sm opacity-70">
+    <main className="mx-auto flex w-full max-w-md flex-col px-5 py-12">
+      <p className="surtitre">Étape 1 sur 1</p>
+      <h1 className="mt-3 text-5xl font-bold">On fait connaissance</h1>
+      <p className="mt-3 text-sm text-attenue">
         Ces réponses servent à construire ton programme. Tu pourras les changer
         plus tard.
       </p>
 
-      <form action={action} className="mt-8 flex flex-col gap-5">
+      <form action={action} className="mt-10 flex flex-col gap-6">
         <Champ label="Tu es">
           <select name="sex" required defaultValue="" className={champ}>
             <option value="" disabled>
@@ -166,7 +167,7 @@ export default function Formulaire() {
         </Champ>
 
         {erreur && (
-          <p aria-live="polite" className="text-sm text-red-700 dark:text-red-400">
+          <p aria-live="polite" className="text-sm text-alerte">
             {erreur}
           </p>
         )}
@@ -174,7 +175,7 @@ export default function Formulaire() {
         <button
           type="submit"
           disabled={enCours}
-          className="rounded-lg bg-foreground px-4 py-3 text-base font-medium text-background disabled:opacity-50"
+          className="bouton-accent mt-2 flex h-14 items-center justify-center text-lg"
         >
           {enCours ? "Un instant…" : "Valider mon profil"}
         </button>

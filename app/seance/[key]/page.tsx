@@ -4,6 +4,8 @@ import { createClient } from "@/lib/supabase/server";
 import { type Programme, trouverSeance } from "@/lib/programme";
 import Formulaire, { type Precedent } from "./formulaire";
 
+export const metadata = { title: "Séance" };
+
 export default async function PageSeance({
   params,
 }: {
@@ -48,18 +50,19 @@ export default async function PageSeance({
   );
 
   return (
-    <main className="mx-auto w-full max-w-sm px-5 py-8">
-      <Link href="/dashboard" className="text-sm opacity-60">
-        ← Retour
+    <main className="mx-auto w-full max-w-md px-5 pt-8">
+      <Link
+        href="/dashboard"
+        className="surtitre inline-flex items-center gap-2 transition-colors hover:text-texte"
+      >
+        <span aria-hidden>&larr;</span> Retour
       </Link>
 
-      <header className="mt-4 mb-8">
-        <p className="text-xs font-medium uppercase tracking-wide opacity-50">
+      <header className="mb-10 mt-6">
+        <p className="surtitre">
           {seance.type === "cardio" ? "Cardio" : "Musculation"}
         </p>
-        <h1 className="mt-1 text-2xl font-semibold tracking-tight">
-          {seance.name}
-        </h1>
+        <h1 className="mt-2 text-5xl font-bold">{seance.name}</h1>
       </header>
 
       <Formulaire seance={seance} precedent={precedent} />

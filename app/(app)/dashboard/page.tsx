@@ -3,17 +3,13 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import {
   type Programme,
+  dureeEstimeeMin,
+  jourActuel,
   prochaineSeance,
   seanceDuJour,
 } from "@/lib/programme";
 
-function Carte({ children }: { children: React.ReactNode }) {
-  return (
-    <section className="rounded-2xl border border-black/10 p-5 dark:border-white/15">
-      {children}
-    </section>
-  );
-}
+export const metadata = { title: "Aujourd'hui" };
 
 export default async function Dashboard() {
   const supabase = await createClient();
@@ -37,10 +33,10 @@ export default async function Dashboard() {
     .select("id, session_key, completed_at")
     .eq("user_id", userId)
     .order("completed_at", { ascending: false })
-    .limit(3);
+    .limit(4);
 
-  // Séance du jour déjà validée ? On compare sur la date locale, pas sur
-  // completed_at brut : une séance faite à 7h et une à 21h sont le même jour.
+  // On compare sur la date locale, pas sur completed_at brut : une séance
+  // faite à 7h et une à 21h sont le même jour.
   const dateDuJour = new Date().toLocaleDateString("fr-FR");
   const dejaFaite = historique?.some(
     (log) =>
@@ -48,73 +44,86 @@ export default async function Dashboard() {
       new Date(log.completed_at).toLocaleDateString("fr-FR") === dateDuJour,
   );
 
+  const duree = aujourdhui ? dureeEstimeeMin(aujourdhui) : null;
+
   return (
-    <main className="mx-auto flex w-full max-w-sm flex-col gap-6 px-5 py-8">
-      <h1 className="text-2xl font-semibold tracking-tight">Aujourd&apos;hui</h1>
+    <main className="mx-auto w-full max-w-md px-5 pt-10">
+      <div className="cascade flex flex-col gap-8">
+        <p className="surtitre">{jourActuel()}</p>
 
-      {aujourdhui ? (
-        <Carte>
-          <p className="text-xs font-medium uppercase tracking-wide opacity-50">
-            {aujourdhui.type === "cardio" ? "Cardio" : "Musculation"}
-          </p>
-          <h2 className="mt-1 text-xl font-semibold">{aujourdhui.name}</h2>
-          <p className="mt-1 text-sm opacity-70">
-            {aujourdhui.type === "muscu"
-              ? `${aujourdhui.exercises.length} exercices`
-              : `${aujourdhui.blocks.length} bloc${aujourdhui.blocks.length > 1 ? "s" : ""}`}
-          </p>
+        {aujourdhui ? (
+          <section>
+            <h1 className="text-6xl font-bold">{aujourdhui.name}</h1>
 
-          {dejaFaite ? (
-            <p className="mt-5 rounded-lg bg-black/5 px-4 py-3 text-center text-sm font-medium dark:bg-white/10">
-              Séance validée. Beau boulot.
+            <p className="surtitre mt-4">
+              {aujourdhui.type === "muscu"
+                ? `${aujourdhui.exercises.length} exercices`
+                : `${aujourdhui.blocks.length} bloc${aujourdhui.blocks.length > 1 ? "s" : ""}`}
+              {duree && ` · ≈ ${duree} min`}
             </p>
-          ) : (
-            <Link
-              href={`/seance/${aujourdhui.key}`}
-              className="mt-5 flex h-12 items-center justify-center rounded-lg bg-foreground font-medium text-background"
-            >
-              Commencer la séance
-            </Link>
-          )}
-        </Carte>
-      ) : (
-        <Carte>
-          <h2 className="text-xl font-semibold">Repos</h2>
-          <p className="mt-1 text-sm opacity-70">
-            {suivante
-              ? `Prochaine séance ${suivante.jour} : ${suivante.seance.name}.`
-              : "Rien de prévu cette semaine."}
-          </p>
-        </Carte>
-      )}
 
-      {historique && historique.length > 0 && (
-        <section>
-          <h2 className="text-sm font-medium uppercase tracking-wide opacity-50">
-            Dernières séances
-          </h2>
-          <ul className="mt-3 flex flex-col gap-2">
-            {historique.map((log) => (
-              <li
-                key={log.id}
-                className="flex items-baseline justify-between gap-3 text-sm"
+            {dejaFaite ? (
+              <div className="carte mt-8 flex items-center gap-3 px-5 py-4">
+                <span
+                  aria-hidden
+                  className="size-2 shrink-0 rounded-full bg-accent"
+                />
+                <p className="text-sm">
+                  Séance validée aujourd&apos;hui. Repose-toi.
+                </p>
+              </div>
+            ) : (
+              <Link
+                href={`/seance/${aujourdhui.key}`}
+                className="bouton-accent mt-8 flex h-16 items-center justify-center text-xl"
               >
-                <span className="truncate">
-                  {programme.program_json.sessions.find(
-                    (s) => s.key === log.session_key,
-                  )?.name ?? log.session_key}
-                </span>
-                <span className="shrink-0 opacity-60">
-                  {new Date(log.completed_at).toLocaleDateString("fr-FR", {
-                    day: "numeric",
-                    month: "short",
-                  })}
-                </span>
-              </li>
-            ))}
-          </ul>
+                Commencer
+              </Link>
+            )}
+          </section>
+        ) : (
+          <section>
+            <h1 className="text-6xl font-bold text-attenue">Repos</h1>
+            {suivante && (
+              <p className="surtitre mt-4">
+                Prochaine séance {suivante.jour} · {suivante.seance.name}
+              </p>
+            )}
+          </section>
+        )}
+
+        <section className="border-t border-bord pt-6">
+          <h2 className="surtitre">Dernières séances</h2>
+
+          {historique && historique.length > 0 ? (
+            <ul className="mt-4 flex flex-col">
+              {historique.map((log) => (
+                <li
+                  key={log.id}
+                  className="flex items-baseline justify-between gap-4 border-b border-bord/60 py-3 last:border-0"
+                >
+                  <span className="truncate text-sm">
+                    {programme.program_json.sessions.find(
+                      (s) => s.key === log.session_key,
+                    )?.name ?? log.session_key}
+                  </span>
+                  <span className="chiffres shrink-0 font-display text-sm uppercase tracking-wider text-attenue">
+                    {new Date(log.completed_at).toLocaleDateString("fr-FR", {
+                      day: "2-digit",
+                      month: "short",
+                    })}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            // Un écran vide qui n'explique rien est une occasion perdue.
+            <p className="mt-4 text-sm text-attenue">
+              Rien encore. Ta première séance validée apparaîtra ici.
+            </p>
+          )}
         </section>
-      )}
+      </div>
     </main>
   );
 }

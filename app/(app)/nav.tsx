@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const ONGLETS = [
-  { href: "/dashboard", libelle: "Aujourd'hui" },
+  { href: "/dashboard", libelle: "Jour" },
   { href: "/programme", libelle: "Programme" },
   { href: "/nutrition", libelle: "Nutrition" },
   { href: "/compte", libelle: "Compte" },
@@ -14,8 +14,8 @@ export default function Nav() {
   const chemin = usePathname();
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 border-t border-black/10 bg-white/95 backdrop-blur dark:border-white/15 dark:bg-black/95">
-      <ul className="mx-auto flex max-w-sm">
+    <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-bord bg-fond/90 backdrop-blur-md">
+      <ul className="mx-auto flex max-w-md">
         {ONGLETS.map((onglet) => {
           const actif = chemin === onglet.href;
           return (
@@ -23,10 +23,21 @@ export default function Nav() {
               <Link
                 href={onglet.href}
                 aria-current={actif ? "page" : undefined}
-                className={`flex h-16 items-center justify-center text-sm ${
-                  actif ? "font-semibold" : "font-medium opacity-50"
-                }`}
+                className="relative flex h-[4.5rem] items-center justify-center font-display text-sm uppercase tracking-widest transition-colors"
+                style={{
+                  color: actif
+                    ? "var(--color-texte)"
+                    : "var(--color-attenue)",
+                }}
               >
+                {/* Trait plein plutôt qu'une simple nuance de gris : l'onglet
+                    actif doit se repérer d'un coup d'œil, bras tendu. */}
+                {actif && (
+                  <span
+                    aria-hidden
+                    className="absolute inset-x-5 top-0 h-0.5 bg-accent"
+                  />
+                )}
                 {onglet.libelle}
               </Link>
             </li>

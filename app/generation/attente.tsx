@@ -6,12 +6,12 @@ import { useRouter } from "next/navigation";
 // La génération prend 15 à 30s. On raconte ce qui se passe plutôt que de
 // laisser tourner un spinner : le membre doit comprendre qu'on travaille.
 const ETAPES = [
-  "On lit ton profil…",
-  "On calcule ton cadre nutritionnel…",
-  "On construit tes séances…",
-  "On répartit ta semaine…",
-  "On choisit tes idées de repas…",
-  "On vérifie tout avant de te le montrer…",
+  "On lit ton profil",
+  "On calcule ton cadre nutritionnel",
+  "On construit tes séances",
+  "On répartit ta semaine",
+  "On choisit tes idées de repas",
+  "On vérifie tout avant de te le montrer",
 ];
 
 const DUREE_ESTIMEE_MS = 30_000;
@@ -50,9 +50,12 @@ export default function Attente() {
 
   if (erreur) {
     return (
-      <main className="mx-auto flex min-h-dvh w-full max-w-sm flex-col justify-center gap-4 px-5 text-center">
-        <h1 className="text-2xl font-semibold">Ça n&apos;a pas marché</h1>
-        <p className="text-sm opacity-70">{erreur}</p>
+      <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col justify-center gap-6 px-5">
+        <div>
+          <p className="surtitre">Échec</p>
+          <h1 className="mt-3 text-5xl font-bold">Ça n&apos;a pas marché</h1>
+          <p className="mt-3 text-sm text-attenue">{erreur}</p>
+        </div>
         <button
           type="button"
           onClick={() => {
@@ -61,7 +64,7 @@ export default function Attente() {
             setEtape(0);
             setEssai((n) => n + 1);
           }}
-          className="rounded-lg bg-foreground px-4 py-3 font-medium text-background"
+          className="bouton-accent flex h-14 items-center justify-center text-lg"
         >
           Réessayer
         </button>
@@ -69,33 +72,52 @@ export default function Attente() {
     );
   }
 
-  const progression = ((etape + 1) / ETAPES.length) * 100;
-
   return (
-    <main className="mx-auto flex min-h-dvh w-full max-w-sm flex-col justify-center gap-6 px-5 text-center">
+    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col justify-center gap-10 px-5">
       <div>
-        <h1 className="text-2xl font-semibold">On te construit ton programme</h1>
-        <p className="mt-2 text-sm opacity-70">
+        <p className="surtitre">Génération</p>
+        <h1 className="mt-3 text-5xl font-bold">
+          On construit
+          <br />
+          ton programme
+        </h1>
+        <p className="mt-3 text-sm text-attenue">
           Une trentaine de secondes. Ne ferme pas cette page.
         </p>
       </div>
 
-      <div
-        className="h-1.5 w-full overflow-hidden rounded-full bg-black/10 dark:bg-white/15"
-        role="progressbar"
-        aria-valuemin={0}
-        aria-valuemax={100}
-        aria-valuenow={Math.round(progression)}
-      >
-        <div
-          className="h-full rounded-full bg-foreground transition-[width] duration-1000 ease-out"
-          style={{ width: `${progression}%` }}
-        />
-      </div>
-
-      <p aria-live="polite" className="text-base font-medium">
-        {ETAPES[etape]}
-      </p>
+      {/* Les étapes restent visibles : celles qui sont passées s'estompent au
+          lieu de disparaître, pour montrer le chemin parcouru. */}
+      <ol className="flex flex-col gap-3">
+        {ETAPES.map((libelle, i) => {
+          const faite = i < etape;
+          const courante = i === etape;
+          return (
+            <li
+              key={libelle}
+              aria-current={courante ? "step" : undefined}
+              className="flex items-center gap-3 transition-opacity duration-500"
+              style={{ opacity: faite ? 0.35 : courante ? 1 : 0.15 }}
+            >
+              <span
+                aria-hidden
+                className="size-1.5 shrink-0 rounded-full transition-colors duration-500"
+                style={{
+                  backgroundColor: courante
+                    ? "var(--color-accent)"
+                    : "var(--color-attenue)",
+                }}
+              />
+              <span
+                className="font-display uppercase tracking-wider"
+                style={{ fontSize: courante ? "1.25rem" : "1rem" }}
+              >
+                {libelle}
+              </span>
+            </li>
+          );
+        })}
+      </ol>
     </main>
   );
 }

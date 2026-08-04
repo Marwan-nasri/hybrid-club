@@ -33,12 +33,12 @@ export default function AutresIdees() {
         type="button"
         onClick={regenerer}
         disabled={enCours}
-        className="flex h-12 items-center justify-center rounded-lg border border-black/15 font-medium disabled:opacity-50 dark:border-white/20"
+        className="bouton-secondaire flex h-14 items-center justify-center text-base"
       >
         {enCours ? "On cherche…" : "D'autres idées"}
       </button>
       {erreur && (
-        <p aria-live="polite" className="text-sm text-red-700 dark:text-red-400">
+        <p aria-live="polite" className="text-sm text-alerte">
           {erreur}
         </p>
       )}

@@ -1,7 +1,13 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { type Programme, joursDeLaSeance } from "@/lib/programme";
+import {
+  type Programme,
+  dureeEstimeeMin,
+  joursDeLaSeance,
+} from "@/lib/programme";
+
+export const metadata = { title: "Programme" };
 
 export default async function VueProgramme() {
   const supabase = await createClient();
@@ -18,52 +24,73 @@ export default async function VueProgramme() {
   const programme = ligne.program_json;
 
   return (
-    <main className="mx-auto flex w-full max-w-sm flex-col gap-6 px-5 py-8">
-      <header>
-        <h1 className="text-2xl font-semibold tracking-tight">Ton programme</h1>
-        <p className="mt-1 text-sm opacity-70">
-          {programme.meta.weeks} semaines · {programme.meta.days_per_week}{" "}
-          séances par semaine
-        </p>
-      </header>
-
-      {programme.sessions.map((seance) => (
-        <section
-          key={seance.key}
-          className="rounded-2xl border border-black/10 p-5 dark:border-white/15"
-        >
-          <p className="text-xs font-medium uppercase tracking-wide opacity-50">
-            {joursDeLaSeance(programme, seance.key).join(" · ")}
+    <main className="mx-auto w-full max-w-md px-5 pt-10">
+      <div className="cascade flex flex-col gap-10">
+        <header>
+          <p className="surtitre">Ton programme</p>
+          <h1 className="mt-3 text-5xl font-bold">
+            {programme.meta.days_per_week} séances
+            <br />
+            par semaine
+          </h1>
+          <p className="surtitre mt-4">
+            Sur {programme.meta.weeks} semaines
+            {ligne.valid_until &&
+              ` · jusqu'au ${new Date(ligne.valid_until).toLocaleDateString("fr-FR", { day: "numeric", month: "long" })}`}
           </p>
-          <h2 className="mt-1 text-lg font-semibold">{seance.name}</h2>
+        </header>
 
-          <ul className="mt-4 flex flex-col gap-3 text-sm">
-            {seance.type === "muscu"
-              ? seance.exercises.map((exercice) => (
-                  <li key={exercice.name}>
-                    <p className="font-medium">{exercice.name}</p>
-                    <p className="opacity-70">
-                      {exercice.sets} × {exercice.reps} · repos{" "}
-                      {exercice.rest_sec}s
-                    </p>
-                  </li>
-                ))
-              : seance.blocks.map((bloc) => (
-                  <li key={bloc.format}>
-                    <p className="font-medium">{bloc.format}</p>
-                    <p className="opacity-70">{bloc.content}</p>
-                  </li>
-                ))}
-          </ul>
+        {programme.sessions.map((seance, i) => {
+          const duree = dureeEstimeeMin(seance);
+          return (
+            <section key={seance.key} className="border-t border-bord pt-6">
+              <div className="flex items-baseline gap-3">
+                <span className="chiffres font-display text-2xl font-bold text-accent">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <h2 className="text-3xl font-bold">{seance.name}</h2>
+              </div>
 
-          <Link
-            href={`/seance/${seance.key}`}
-            className="mt-5 flex h-11 items-center justify-center rounded-lg border border-black/15 text-sm font-medium dark:border-white/20"
-          >
-            Ouvrir la séance
-          </Link>
-        </section>
-      ))}
+              <p className="surtitre mt-2">
+                {joursDeLaSeance(programme, seance.key).join(" · ")}
+                {duree && ` · ≈ ${duree} min`}
+              </p>
+
+              <ul className="mt-5 flex flex-col gap-3">
+                {seance.type === "muscu"
+                  ? seance.exercises.map((exercice) => (
+                      <li
+                        key={exercice.name}
+                        className="flex items-baseline justify-between gap-4"
+                      >
+                        <span className="text-sm">{exercice.name}</span>
+                        <span className="chiffres shrink-0 font-display text-sm uppercase tracking-wider text-attenue">
+                          {exercice.sets} × {exercice.reps}
+                        </span>
+                      </li>
+                    ))
+                  : seance.blocks.map((bloc) => (
+                      <li key={bloc.format}>
+                        <p className="font-display text-base uppercase tracking-wider">
+                          {bloc.format}
+                        </p>
+                        <p className="mt-1 text-sm text-attenue">
+                          {bloc.content}
+                        </p>
+                      </li>
+                    ))}
+              </ul>
+
+              <Link
+                href={`/seance/${seance.key}`}
+                className="bouton-secondaire mt-6 flex h-12 items-center justify-center text-sm"
+              >
+                Ouvrir la séance
+              </Link>
+            </section>
+          );
+        })}
+      </div>
     </main>
   );
 }

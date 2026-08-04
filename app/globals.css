@@ -1,26 +1,198 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ---------------------------------------------------------------------------
+   Hybrid Club — sombre & performance.
+   L'app assume le sombre : pas de bascule clair/sombre, donc pas de variantes
+   `dark:` à maintenir sur chaque composant.
+   --------------------------------------------------------------------------- */
+
+@theme {
+  /* Noir teinté, jamais #000 pur : le noir absolu écrase les nuances et fait
+     baver le texte sur les écrans OLED des téléphones. */
+  --color-fond: #0a0a0a;
+  --color-surface: #141414;
+  --color-surface-haute: #1c1c1c;
+  --color-bord: #272727;
+  --color-texte: #f4f4f0;
+  --color-attenue: #8b8b85;
+
+  /* Un seul accent, jamais deux. Réservé à l'action principale de l'écran. */
+  --color-accent: #d4ff3f;
+  --color-accent-sombre: #b8e02f;
+
+  --color-alerte: #ff5c47;
+
+  --font-display: var(--font-display), "Arial Narrow", sans-serif;
+  --font-sans: var(--font-sans-geist), system-ui, sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* Le fond déborde derrière la barre d'adresse mobile pendant le scroll. */
+    background-color: var(--color-fond);
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  body {
+    background-color: var(--color-fond);
+    color: var(--color-texte);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    /* Empêche iOS de grossir le texte en paysage. */
+    text-size-adjust: 100%;
+  }
+
+  /* Les titres portent l'identité : condensés, serrés, en capitales. */
+  h1,
+  h2 {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    line-height: 0.95;
+    text-wrap: balance;
+  }
+
+  /* Toute donnée chiffrée s'aligne verticalement : sans ça, une charge qui
+     passe de 40 à 100 kg fait sauter la colonne. */
+  input[type="number"],
+  .chiffres {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Anneau de focus visible partout — c'est une exigence d'accessibilité,
+     pas une décoration. */
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-fond);
+  }
+
+  /* Retire les flèches des champs numériques : en salle, on tape, on ne
+     clique pas sur des micro-boutons. */
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    appearance: textfield;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  /* Étiquette de section : petites capitales espacées, gris atténué. */
+  .surtitre {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 0.6875rem;
+    color: var(--color-attenue);
+  }
+
+  .carte {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-bord);
+    border-radius: 1rem;
+  }
+
+  /* Action principale. Le retrait au clic simule un vrai bouton physique. */
+  .bouton-accent {
+    background-color: var(--color-accent);
+    color: var(--color-fond);
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-weight: 600;
+    border-radius: 0.75rem;
+    transition:
+      background-color 200ms ease,
+      transform 120ms ease;
+  }
+  .bouton-accent:hover:not(:disabled) {
+    background-color: var(--color-accent-sombre);
+  }
+  .bouton-accent:active:not(:disabled) {
+    transform: translateY(1px);
+  }
+  .bouton-accent:disabled {
+    opacity: 0.4;
+  }
+
+  .bouton-secondaire {
+    border: 1px solid var(--color-bord);
+    color: var(--color-texte);
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-radius: 0.75rem;
+    transition:
+      border-color 200ms ease,
+      background-color 200ms ease,
+      transform 120ms ease;
+  }
+  .bouton-secondaire:hover:not(:disabled) {
+    border-color: var(--color-attenue);
+    background-color: var(--color-surface-haute);
+  }
+  .bouton-secondaire:active:not(:disabled) {
+    transform: translateY(1px);
+  }
+  .bouton-secondaire:disabled {
+    opacity: 0.4;
+  }
+
+  .champ {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-bord);
+    border-radius: 0.75rem;
+    color: var(--color-texte);
+    transition: border-color 200ms ease;
+  }
+  .champ::placeholder {
+    color: var(--color-attenue);
+  }
+  .champ:focus {
+    border-color: var(--color-accent);
+    outline: none;
+  }
+
+  /* Entrée en cascade : les éléments arrivent décalés plutôt que d'un bloc. */
+  .cascade > * {
+    animation: monte 420ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  }
+  .cascade > *:nth-child(1) { animation-delay: 40ms; }
+  .cascade > *:nth-child(2) { animation-delay: 90ms; }
+  .cascade > *:nth-child(3) { animation-delay: 140ms; }
+  .cascade > *:nth-child(4) { animation-delay: 190ms; }
+  .cascade > *:nth-child(5) { animation-delay: 240ms; }
+  .cascade > *:nth-child(n + 6) { animation-delay: 280ms; }
+}
+
+@keyframes monte {
+  from {
+    opacity: 0;
+    /* transform et opacity uniquement : accélérés par le GPU. */
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Quelqu'un qui a demandé moins d'animations n'en reçoit aucune. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

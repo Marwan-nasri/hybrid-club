@@ -16,7 +16,7 @@ export default function Suppression() {
       <button
         type="button"
         onClick={() => setOuvert(true)}
-        className="text-sm font-medium text-red-700 underline dark:text-red-400"
+        className="text-sm font-medium text-alerte underline underline-offset-4"
       >
         Supprimer mon compte
       </button>
@@ -26,12 +26,12 @@ export default function Suppression() {
   return (
     <form
       action={action}
-      className="rounded-xl border border-red-500/40 bg-red-500/5 p-4"
+      className="rounded-xl border border-alerte/40 bg-alerte/5 p-5"
     >
       <p className="text-sm font-medium">
         Supprimer définitivement ton compte ?
       </p>
-      <p className="mt-1 text-sm opacity-80">
+      <p className="mt-2 text-sm text-attenue">
         Ton profil, tes programmes et tout ton historique de séances seront
         effacés. C&apos;est immédiat et irréversible — pense à exporter tes
         données avant.
@@ -47,12 +47,12 @@ export default function Suppression() {
           required
           autoComplete="off"
           autoCapitalize="characters"
-          className="rounded-lg border border-black/15 bg-transparent px-3 py-3 text-base outline-none focus:border-red-600 dark:border-white/20"
+          className="champ h-14 px-4 text-base uppercase tracking-widest"
         />
       </label>
 
       {erreur && (
-        <p aria-live="polite" className="mt-2 text-sm text-red-700 dark:text-red-400">
+        <p aria-live="polite" className="mt-2 text-sm text-alerte">
           {erreur}
         </p>
       )}
@@ -61,14 +61,14 @@ export default function Suppression() {
         <button
           type="button"
           onClick={() => setOuvert(false)}
-          className="flex-1 rounded-lg border border-black/15 py-3 text-sm font-medium dark:border-white/20"
+          className="bouton-secondaire flex-1 py-3.5 text-sm"
         >
           Annuler
         </button>
         <button
           type="submit"
           disabled={enCours}
-          className="flex-1 rounded-lg bg-red-700 py-3 text-sm font-medium text-white disabled:opacity-50"
+          className="flex-1 rounded-xl bg-alerte py-3.5 font-display text-sm uppercase tracking-wider text-fond transition-transform active:translate-y-px disabled:opacity-40"
         >
           {enCours ? "Suppression…" : "Supprimer"}
         </button>

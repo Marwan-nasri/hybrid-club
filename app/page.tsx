@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { deconnexion } from "./connexion/actions";
 import { createClient } from "@/lib/supabase/server";
 
 export default async function Home() {
@@ -7,8 +6,7 @@ export default async function Home() {
   const { data } = await supabase.auth.getClaims();
   const email = data?.claims.email;
 
-  // Placeholder : la vraie landing, c'est l'étape 9. Ici on affiche juste de
-  // quoi vérifier que l'onboarding a bien tourné.
+  // Placeholder : la vraie landing, c'est l'étape 9.
   const { data: profil } = email
     ? await supabase
         .from("profiles")
@@ -27,68 +25,44 @@ export default async function Home() {
     : { data: null };
 
   return (
-    <div className="flex min-h-dvh flex-col bg-white font-sans dark:bg-black">
-      <header className="flex w-full items-center justify-between gap-3 border-b border-black/10 px-5 py-3 text-sm dark:border-white/15">
-        {email ? (
-          <>
-            <span className="min-w-0 truncate">
-              Connecté en tant que{" "}
-              <strong className="font-medium">{email}</strong>
-            </span>
-            <form action={deconnexion}>
-              <button
-                type="submit"
-                className="shrink-0 rounded-lg border border-black/15 px-3 py-1.5 font-medium dark:border-white/20"
-              >
-                Se déconnecter
-              </button>
-            </form>
-          </>
-        ) : (
-          <>
-            <span>Tu n&apos;es pas connecté.</span>
-            <Link href="/connexion" className="shrink-0 font-medium underline">
-              Se connecter
-            </Link>
-          </>
-        )}
-      </header>
+    <main className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center gap-8 px-5 py-12">
+      <div>
+        <p className="surtitre">Hybrid Club</p>
+        <h1 className="mt-3 text-6xl font-bold">
+          Muscu
+          <br />
+          <span className="text-accent">+</span> cardio
+        </h1>
+        <p className="mt-4 text-sm leading-relaxed text-attenue">
+          Ton programme et ton cadre nutritionnel, construits sur ton profil.
+        </p>
+      </div>
 
-      <main className="mx-auto flex w-full max-w-sm flex-1 flex-col justify-center gap-4 px-5 py-16">
-        <h1 className="text-3xl font-semibold tracking-tight">Hybrid Club</h1>
-
-        {!email ? (
-          <p className="opacity-70">
-            Connecte-toi pour rejoindre le club.
-          </p>
-        ) : profil?.onboarding_completed ? (
-          <>
-            <p className="text-lg">
-              Bienvenue, membre n°
-              <strong className="font-semibold">
-                {profil.member_number ?? "—"}
-              </strong>
-              .
-            </p>
-            {programme ? (
-              <Link
-                href="/dashboard"
-                className="flex h-12 items-center justify-center rounded-lg bg-foreground font-medium text-background"
-              >
-                Voir ma séance du jour
-              </Link>
-            ) : (
-              <Link href="/generation" className="font-medium underline">
-                Générer mon programme
-              </Link>
-            )}
-          </>
-        ) : (
-          <Link href="/onboarding" className="font-medium underline">
-            Termine ton profil pour rejoindre le club
+      {!email ? (
+        <Link
+          href="/connexion"
+          className="bouton-accent flex h-14 items-center justify-center text-lg"
+        >
+          Rejoindre le club
+        </Link>
+      ) : profil?.onboarding_completed ? (
+        <div className="flex flex-col gap-3">
+          <p className="surtitre">Membre n°{profil.member_number ?? "—"}</p>
+          <Link
+            href={programme ? "/dashboard" : "/generation"}
+            className="bouton-accent flex h-14 items-center justify-center text-lg"
+          >
+            {programme ? "Ma séance du jour" : "Générer mon programme"}
           </Link>
-        )}
-      </main>
-    </div>
+        </div>
+      ) : (
+        <Link
+          href="/onboarding"
+          className="bouton-accent flex h-14 items-center justify-center text-lg"
+        >
+          Compléter mon profil
+        </Link>
+      )}
+    </main>
   );
 }
