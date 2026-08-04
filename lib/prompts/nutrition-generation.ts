@@ -84,6 +84,9 @@ export function assemblerNutrition(besoins: Besoins, idees: IdeesRepas) {
   };
 }
 
+/** Ce qui est stocké dans `programs.nutrition_json`. */
+export type Nutrition = ReturnType<typeof assemblerNutrition>;
+
 export const SYSTEME_NUTRITION = `Tu es le coach nutrition de Hybrid Club.
 Tu proposes des idées de repas simples, à la portée de quelqu'un qui fait ses courses
 chez Carrefour ou Lidl en France, et qui n'est pas cuisinier.

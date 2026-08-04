@@ -65,9 +65,10 @@ Coche chaque case au fur et à mesure. Ne saute pas d'étape, ne dévie pas du p
 - [x] Vue programme complet /programme
 
 ### Étape 5 — Nutrition (1 jour)
-- [ ] Écran /nutrition : macros en gros + idées de repas en cartes
-- [ ] Bouton "d'autres idées" → régénère seulement les repas
-- [ ] Disclaimer visible
+- [x] Écran /nutrition : macros en gros + idées de repas en cartes
+- [x] Bouton "d'autres idées" → régénère seulement les repas
+      → vérifié : les repas changent, les macros restent identiques au kcal près
+- [x] Disclaimer visible (bas de page, jamais replié)
 
 ### Étape 6 — Paiement Stripe (2 jours)
 - [ ] Produits Stripe : fondateur 49€/an, mensuel 9,99€, annuel 79€

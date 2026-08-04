@@ -66,6 +66,25 @@ export type Generation = {
   besoins: Besoins;
 };
 
+/**
+ * Seulement les idées de repas, à cadre nutritionnel inchangé. C'est ce que
+ * fait le bouton « D'autres idées » : les macros ne bougent pas, elles ne
+ * dépendent pas de l'IA.
+ */
+export async function genererIdeesRepas(
+  profil: ProfilComplet,
+  besoins: Besoins,
+) {
+  const idees = await avecUnReessai(() =>
+    generer(
+      SchemaIdeesRepas,
+      SYSTEME_NUTRITION,
+      promptNutrition(profil, besoins),
+    ),
+  );
+  return assemblerNutrition(besoins, idees);
+}
+
 export async function genererPourProfil(
   profil: ProfilComplet,
 ): Promise<Generation> {
@@ -75,22 +94,12 @@ export async function genererPourProfil(
 
   // Les deux appels sont indépendants — en parallèle, l'attente du membre
   // c'est le plus lent des deux, pas la somme.
-  const [programme, idees] = await Promise.all([
+  const [programme, nutrition] = await Promise.all([
     avecUnReessai(() =>
       generer(SchemaProgramme, SYSTEME_PROGRAMME, promptProgramme(profil)),
     ),
-    avecUnReessai(() =>
-      generer(
-        SchemaIdeesRepas,
-        SYSTEME_NUTRITION,
-        promptNutrition(profil, besoins),
-      ),
-    ),
+    genererIdeesRepas(profil, besoins),
   ]);
 
-  return {
-    program_json: programme,
-    nutrition_json: assemblerNutrition(besoins, idees),
-    besoins,
-  };
+  return { program_json: programme, nutrition_json: nutrition, besoins };
 }
