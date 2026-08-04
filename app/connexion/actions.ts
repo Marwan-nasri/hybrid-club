@@ -28,7 +28,10 @@ export async function authentifier(
     });
 
     if (error) {
-      return { message: messageInscription(error.message), ok: false };
+      // Le détail exact reste côté serveur : il sert à diagnostiquer, pas à
+      // être montré au membre.
+      console.error("[inscription]", error.code, error.message);
+      return { message: messageInscription(error.code, error.message), ok: false };
     }
     return {
       message: "Compte créé. Clique sur le lien qu'on vient de t'envoyer par email.",
@@ -57,11 +60,25 @@ export async function deconnexion() {
   redirect("/connexion");
 }
 
-function messageInscription(erreur: string) {
-  if (/already registered|already exists/i.test(erreur)) {
+function messageInscription(code: string | undefined, message: string) {
+  switch (code) {
+    case "user_already_exists":
+    case "email_exists":
+      return "Un compte existe déjà avec cet email. Connecte-toi.";
+    case "weak_password":
+      return "Ton mot de passe doit faire au moins 8 caractères.";
+    case "email_address_invalid":
+      return "Cette adresse email n'est pas valide.";
+    case "over_email_send_rate_limit":
+    case "over_request_rate_limit":
+      // Surtout ne pas dire « réessaie » : chaque tentative repousse le déblocage.
+      return "Trop de tentatives d'inscription. Attends une heure avant de réessayer.";
+  }
+  // Sans code connu, on retombe sur le texte du message.
+  if (/already registered|already exists/i.test(message)) {
     return "Un compte existe déjà avec cet email. Connecte-toi.";
   }
-  if (/password/i.test(erreur)) {
+  if (/password/i.test(message)) {
     return "Ton mot de passe doit faire au moins 8 caractères.";
   }
   return "L'inscription a échoué. Réessaie dans un instant.";
