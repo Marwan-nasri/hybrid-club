@@ -98,3 +98,18 @@ middleware.ts
 2. Après chaque étape, proposer un test simple avant de continuer.
 3. En cas de doute, demander plutôt que supposer.
 4. Toute modif de schéma se répercute dans `docs/schema.sql`.
+
+## Palette de couleurs (identique à la landing)
+
+- `#0B0D11` — noir, fond principal
+- `#14171E` — carbone, cartes et blocs
+- `#232833` — ligne, bordures
+- `#F2F1EC` — blanc cassé, texte principal
+- `#9BA1AE` — gris, texte secondaire
+- `#FF4B2B` — force (rouge-orangé), accent muscu
+- `#5B7CFF` — flux (bleu électrique), accent cardio
+- `#F5C55A` — or, offre fondateur et accents premium
+
+Les dégradés force → flux (`linear-gradient(90deg, #FF4B2B, #5B7CFF)`) sont la signature visuelle de la marque : à utiliser sur les CTA principaux et les éléments d'identité.
+
+Typographies : Anton (titres display), Space Grotesk (texte courant), Space Mono (labels techniques, chiffres).

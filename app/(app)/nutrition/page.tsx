@@ -7,8 +7,8 @@ export const metadata = { title: "Nutrition" };
 
 function Macro({ valeur, libelle }: { valeur: number; libelle: string }) {
   return (
-    <div className="flex-1 border-t-2 border-bord pt-3">
-      <p className="chiffres font-display text-3xl font-bold">{valeur}g</p>
+    <div className="flex-1 border-t-2 border-ligne pt-3">
+      <p className="chiffres font-display text-3xl">{valeur}g</p>
       <p className="surtitre mt-0.5">{libelle}</p>
     </div>
   );
@@ -48,18 +48,18 @@ export default async function PageNutrition() {
         </header>
 
         {n.avertissement && (
-          <p className="border-l-2 border-alerte pl-4 text-sm">
+          <p className="border-l-2 border-force pl-4 text-sm">
             {n.avertissement}
           </p>
         )}
 
-        <p className="text-sm leading-relaxed text-attenue">{n.philosophy}</p>
+        <p className="text-sm leading-relaxed text-gris">{n.philosophy}</p>
 
         {n.meals.map((repas) => (
-          <section key={repas.moment} className="border-t border-bord pt-6">
+          <section key={repas.moment} className="border-t border-ligne pt-6">
             <div className="flex items-baseline justify-between gap-4">
-              <h2 className="text-2xl font-bold">{repas.libelle}</h2>
-              <span className="chiffres shrink-0 font-display text-sm uppercase tracking-wider text-attenue">
+              <h2 className="text-2xl">{repas.libelle}</h2>
+              <span className="chiffres shrink-0 font-display text-sm uppercase tracking-wider text-gris">
                 ≈ {repas.target_kcal} kcal
               </span>
             </div>
@@ -68,10 +68,10 @@ export default async function PageNutrition() {
               {repas.options.map((option) => (
                 <li key={option.name}>
                   <p className="font-medium">{option.name}</p>
-                  <p className="chiffres mt-1 font-display text-sm uppercase tracking-wider text-accent">
+                  <p className="chiffres mt-1 text-sm uppercase tracking-wider text-gris">
                     {option.approx.kcal} kcal · {option.approx.prot_g}g prot
                   </p>
-                  <p className="mt-1 text-sm text-attenue">{option.why}</p>
+                  <p className="mt-1 text-sm text-gris">{option.why}</p>
                 </li>
               ))}
             </ul>
@@ -80,12 +80,12 @@ export default async function PageNutrition() {
 
         <AutresIdees />
 
-        <section className="border-t border-bord pt-6">
+        <section className="border-t border-ligne pt-6">
           <h2 className="surtitre">À retenir</h2>
           <ul className="mt-4 flex flex-col gap-3">
             {n.goal_tips.map((conseil) => (
               <li key={conseil} className="flex gap-3 text-sm">
-                <span aria-hidden className="text-accent">
+                <span aria-hidden className="text-gris">
                   —
                 </span>
                 {conseil}
@@ -94,15 +94,15 @@ export default async function PageNutrition() {
           </ul>
         </section>
 
-        <section className="border-t border-bord pt-6">
+        <section className="border-t border-ligne pt-6">
           <h2 className="surtitre">Tes basiques de courses</h2>
-          <p className="mt-3 text-sm leading-relaxed text-attenue">
+          <p className="mt-3 text-sm leading-relaxed text-gris">
             {n.grocery_staples.join(" · ")}
           </p>
         </section>
 
         {/* docs/nutrition-spec.md §7 : visible, jamais replié. */}
-        <p className="border-t border-bord pt-6 text-xs leading-relaxed text-attenue">
+        <p className="border-t border-ligne pt-6 text-xs leading-relaxed text-gris">
           {n.disclaimer}
         </p>
       </div>

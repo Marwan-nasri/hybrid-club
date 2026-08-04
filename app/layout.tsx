@@ -1,20 +1,25 @@
 import type { Metadata, Viewport } from "next";
-import { Barlow_Condensed, Geist } from "next/font/google";
+import { Anton, Space_Grotesk, Space_Mono } from "next/font/google";
 import "./globals.css";
 
-// Condensée et large pour les titres et les chiffres : c'est ce qui donne le
-// caractère « salle de sport » sans avoir à charger d'images.
-const display = Barlow_Condensed({
-  variable: "--font-display",
+// Les trois polices de CLAUDE.md. Anton n'existe qu'en 400 : c'est une
+// display, elle porte les titres et rien d'autre.
+const anton = Anton({
+  variable: "--font-anton",
   subsets: ["latin"],
-  weight: ["500", "600", "700"],
+  weight: "400",
 });
 
-// Geist pour le texte courant : lisible en petit corps, ce que Barlow
-// Condensed ne fait pas bien.
-const texte = Geist({
-  variable: "--font-sans-geist",
+const grotesk = Space_Grotesk({
+  variable: "--font-grotesk",
   subsets: ["latin"],
+});
+
+// Space Mono pour les labels techniques et tous les chiffres.
+const spaceMono = Space_Mono({
+  variable: "--font-mono-space",
+  subsets: ["latin"],
+  weight: ["400", "700"],
 });
 
 export const metadata: Metadata = {
@@ -29,7 +34,7 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   // La barre d'état du téléphone prend la couleur de l'app.
-  themeColor: "#0a0a0a",
+  themeColor: "#0b0d11",
   colorScheme: "dark",
 };
 
@@ -41,7 +46,7 @@ export default function RootLayout({
   return (
     <html
       lang="fr"
-      className={`${display.variable} ${texte.variable} h-full`}
+      className={`${anton.variable} ${grotesk.variable} ${spaceMono.variable} h-full`}
     >
       <body className="relative flex min-h-full flex-col">
         {/* Grain fixe très léger : casse la platitude du aplat noir sans

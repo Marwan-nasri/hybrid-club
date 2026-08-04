@@ -16,7 +16,7 @@ export default function Suppression() {
       <button
         type="button"
         onClick={() => setOuvert(true)}
-        className="text-sm font-medium text-alerte underline underline-offset-4"
+        className="text-sm font-medium text-force underline underline-offset-4"
       >
         Supprimer mon compte
       </button>
@@ -26,12 +26,12 @@ export default function Suppression() {
   return (
     <form
       action={action}
-      className="rounded-xl border border-alerte/40 bg-alerte/5 p-5"
+      className="rounded-xl border border-force/40 bg-force/5 p-5"
     >
       <p className="text-sm font-medium">
         Supprimer définitivement ton compte ?
       </p>
-      <p className="mt-2 text-sm text-attenue">
+      <p className="mt-2 text-sm text-gris">
         Ton profil, tes programmes et tout ton historique de séances seront
         effacés. C&apos;est immédiat et irréversible — pense à exporter tes
         données avant.
@@ -52,7 +52,7 @@ export default function Suppression() {
       </label>
 
       {erreur && (
-        <p aria-live="polite" className="mt-2 text-sm text-alerte">
+        <p aria-live="polite" className="mt-2 text-sm text-force">
           {erreur}
         </p>
       )}
@@ -68,7 +68,7 @@ export default function Suppression() {
         <button
           type="submit"
           disabled={enCours}
-          className="flex-1 rounded-xl bg-alerte py-3.5 font-display text-sm uppercase tracking-wider text-fond transition-transform active:translate-y-px disabled:opacity-40"
+          className="flex-1 rounded-xl bg-force py-3.5 font-display text-sm uppercase tracking-wider text-noir transition-transform active:translate-y-px disabled:opacity-40"
         >
           {enCours ? "Suppression…" : "Supprimer"}
         </button>

@@ -14,7 +14,7 @@ export default function Nav() {
   const chemin = usePathname();
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-bord bg-fond/90 backdrop-blur-md">
+    <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-ligne bg-noir/90 backdrop-blur-md">
       <ul className="mx-auto flex max-w-md">
         {ONGLETS.map((onglet) => {
           const actif = chemin === onglet.href;
@@ -27,7 +27,7 @@ export default function Nav() {
                 style={{
                   color: actif
                     ? "var(--color-texte)"
-                    : "var(--color-attenue)",
+                    : "var(--color-gris)",
                 }}
               >
                 {/* Trait plein plutôt qu'une simple nuance de gris : l'onglet
@@ -35,7 +35,7 @@ export default function Nav() {
                 {actif && (
                   <span
                     aria-hidden
-                    className="absolute inset-x-5 top-0 h-0.5 bg-accent"
+                    className="degrade absolute inset-x-5 top-0 h-0.5"
                   />
                 )}
                 {onglet.libelle}

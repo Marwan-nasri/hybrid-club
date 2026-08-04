@@ -19,7 +19,7 @@ function Champ({
     <label className="flex flex-col gap-2">
       <span className="surtitre">{intitule}</span>
       {children}
-      {aide && <span className="text-xs text-attenue">{aide}</span>}
+      {aide && <span className="text-xs text-gris">{aide}</span>}
     </label>
   );
 }
@@ -33,8 +33,8 @@ export default function Formulaire() {
   return (
     <main className="mx-auto flex w-full max-w-md flex-col px-5 py-12">
       <p className="surtitre">Étape 1 sur 1</p>
-      <h1 className="mt-3 text-5xl font-bold">On fait connaissance</h1>
-      <p className="mt-3 text-sm text-attenue">
+      <h1 className="mt-3 text-5xl">On fait connaissance</h1>
+      <p className="mt-3 text-sm text-gris">
         Ces réponses servent à construire ton programme. Tu pourras les changer
         plus tard.
       </p>
@@ -167,7 +167,7 @@ export default function Formulaire() {
         </Champ>
 
         {erreur && (
-          <p aria-live="polite" className="text-sm text-alerte">
+          <p aria-live="polite" className="text-sm text-force">
             {erreur}
           </p>
         )}

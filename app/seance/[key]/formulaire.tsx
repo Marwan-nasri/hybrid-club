@@ -27,6 +27,11 @@ export default function Formulaire({
     null,
   );
 
+  // Force pour la muscu, flux pour le cardio : l'accent porte l'information,
+  // il ne décore pas.
+  const accent = seance.type === "cardio" ? "text-flux" : "text-force";
+  const bordAccent = seance.type === "cardio" ? "border-flux" : "border-force";
+
   return (
     <form action={action} className="flex flex-col gap-12 pb-40">
       <input type="hidden" name="seance_key" value={seance.key} />
@@ -37,17 +42,17 @@ export default function Formulaire({
             return (
               <section key={exercice.name}>
                 <div className="flex items-baseline gap-3">
-                  <span className="chiffres font-display text-3xl font-bold text-accent">
+                  <span className={`chiffres font-display text-3xl ${accent}`}>
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <h2 className="text-2xl font-semibold">{exercice.name}</h2>
+                  <h2 className="text-2xl">{exercice.name}</h2>
                 </div>
 
                 <p className="surtitre mt-2">
                   {exercice.sets} séries · {exercice.reps} reps · repos{" "}
                   {exercice.rest_sec}s
                 </p>
-                <p className="mt-2 text-sm text-attenue">{exercice.notes}</p>
+                <p className="mt-2 text-sm text-gris">{exercice.notes}</p>
 
                 <div className="mt-5 flex flex-col gap-2">
                   <div className="flex items-center gap-3">
@@ -58,7 +63,7 @@ export default function Formulaire({
 
                   {Array.from({ length: exercice.sets }, (_, j) => (
                     <div key={j} className="flex items-center gap-3">
-                      <span className="chiffres w-6 shrink-0 font-display text-lg text-attenue">
+                      <span className="chiffres w-6 shrink-0 font-display text-lg text-gris">
                         {j + 1}
                       </span>
                       <input
@@ -88,7 +93,7 @@ export default function Formulaire({
                   ))}
                 </div>
 
-                <p className="mt-4 border-l-2 border-accent pl-3 text-sm text-attenue">
+                <p className={`mt-4 border-l-2 ${bordAccent} pl-3 text-sm text-gris`}>
                   {exercice.progression}
                 </p>
               </section>
@@ -97,23 +102,23 @@ export default function Formulaire({
         : seance.blocks.map((bloc, i) => (
             <section key={bloc.format}>
               <div className="flex items-baseline gap-3">
-                <span className="chiffres font-display text-3xl font-bold text-accent">
+                <span className={`chiffres font-display text-3xl ${accent}`}>
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <h2 className="text-2xl font-semibold">{bloc.format}</h2>
+                <h2 className="text-2xl">{bloc.format}</h2>
               </div>
               <p className="mt-3 leading-relaxed">{bloc.content}</p>
             </section>
           ))}
 
       {erreur && (
-        <p aria-live="polite" className="text-sm text-alerte">
+        <p aria-live="polite" className="text-sm text-force">
           {erreur}
         </p>
       )}
 
       {/* Collé en bas : atteignable au pouce sans remonter toute la page. */}
-      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-bord bg-fond/95 px-5 pb-[calc(1rem+env(safe-area-inset-bottom))] pt-4 backdrop-blur-md">
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-ligne bg-noir/95 px-5 pb-[calc(1rem+env(safe-area-inset-bottom))] pt-4 backdrop-blur-md">
         <button
           type="submit"
           disabled={enCours}

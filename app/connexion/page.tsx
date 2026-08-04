@@ -22,10 +22,10 @@ export default function Connexion() {
     <main className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center px-5 py-12">
       <div className="cascade flex flex-col">
         <p className="surtitre">Hybrid Club</p>
-        <h1 className="mt-3 text-5xl font-bold">
+        <h1 className="mt-3 text-5xl">
           {inscription ? "Rejoins le club" : "Bon retour"}
         </h1>
-        <p className="mt-3 text-sm text-attenue">
+        <p className="mt-3 text-sm text-gris">
           {inscription
             ? "Crée ton compte pour construire ton programme."
             : "Connecte-toi pour retrouver ton programme."}
@@ -36,7 +36,7 @@ export default function Connexion() {
         <div
           role="tablist"
           aria-label="Connexion ou inscription"
-          className="mt-8 flex gap-1 rounded-xl border border-bord bg-surface p-1"
+          className="mt-8 flex gap-1 rounded-xl border border-ligne bg-carbone p-1"
         >
           {(["connexion", "inscription"] as const).map((valeur) => (
             <button
@@ -45,15 +45,9 @@ export default function Connexion() {
               role="tab"
               aria-selected={mode === valeur}
               onClick={() => setMode(valeur)}
-              className="flex-1 rounded-lg py-2.5 font-display text-sm uppercase tracking-wider transition-colors"
-              style={{
-                backgroundColor:
-                  mode === valeur ? "var(--color-accent)" : "transparent",
-                color:
-                  mode === valeur
-                    ? "var(--color-fond)"
-                    : "var(--color-attenue)",
-              }}
+              className={`flex-1 rounded-lg py-2.5 font-display text-sm uppercase tracking-wider transition-colors ${
+                mode === valeur ? "degrade text-texte" : "text-gris"
+              }`}
             >
               {valeur === "connexion" ? "Connexion" : "Inscription"}
             </button>
@@ -93,7 +87,7 @@ export default function Connexion() {
               className="champ h-14 px-4 text-base"
             />
             {inscription && (
-              <span className="text-xs text-attenue">8 caractères minimum.</span>
+              <span className="text-xs text-gris">8 caractères minimum.</span>
             )}
           </label>
 
@@ -102,7 +96,7 @@ export default function Connexion() {
               aria-live="polite"
               className="text-sm"
               style={{
-                color: etat.ok ? "var(--color-accent)" : "var(--color-alerte)",
+                color: etat.ok ? "var(--color-flux)" : "var(--color-force)",
               }}
             >
               {etat.message}

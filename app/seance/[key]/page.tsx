@@ -62,7 +62,7 @@ export default async function PageSeance({
         <p className="surtitre">
           {seance.type === "cardio" ? "Cardio" : "Musculation"}
         </p>
-        <h1 className="mt-2 text-5xl font-bold">{seance.name}</h1>
+        <h1 className="mt-2 text-5xl">{seance.name}</h1>
       </header>
 
       <Formulaire seance={seance} precedent={precedent} />

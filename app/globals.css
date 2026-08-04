@@ -1,40 +1,38 @@
 @import "tailwindcss";
 
 /* ---------------------------------------------------------------------------
-   Hybrid Club — sombre & performance.
+   Hybrid Club — palette de CLAUDE.md, identique à la landing.
    L'app assume le sombre : pas de bascule clair/sombre, donc pas de variantes
    `dark:` à maintenir sur chaque composant.
    --------------------------------------------------------------------------- */
 
 @theme {
-  /* Noir teinté, jamais #000 pur : le noir absolu écrase les nuances et fait
-     baver le texte sur les écrans OLED des téléphones. */
-  --color-fond: #0a0a0a;
-  --color-surface: #141414;
-  --color-surface-haute: #1c1c1c;
-  --color-bord: #272727;
-  --color-texte: #f4f4f0;
-  --color-attenue: #8b8b85;
+  --color-noir: #0b0d11;
+  --color-carbone: #14171e;
+  --color-ligne: #232833;
+  --color-texte: #f2f1ec;
+  --color-gris: #9ba1ae;
 
-  /* Un seul accent, jamais deux. Réservé à l'action principale de l'écran. */
-  --color-accent: #d4ff3f;
-  --color-accent-sombre: #b8e02f;
+  /* Deux accents, et ils veulent dire quelque chose : force pour la muscu,
+     flux pour le cardio. Ne jamais les intervertir. */
+  --color-force: #ff4b2b;
+  --color-flux: #5b7cff;
+  --color-or: #f5c55a;
 
-  --color-alerte: #ff5c47;
-
-  --font-display: var(--font-display), "Arial Narrow", sans-serif;
-  --font-sans: var(--font-sans-geist), system-ui, sans-serif;
+  --font-display: var(--font-anton), "Arial Narrow", sans-serif;
+  --font-sans: var(--font-grotesk), system-ui, sans-serif;
+  --font-mono: var(--font-mono-space), ui-monospace, monospace;
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
     /* Le fond déborde derrière la barre d'adresse mobile pendant le scroll. */
-    background-color: var(--color-fond);
+    background-color: var(--color-noir);
   }
 
   body {
-    background-color: var(--color-fond);
+    background-color: var(--color-noir);
     color: var(--color-texte);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
@@ -42,34 +40,40 @@
     text-size-adjust: 100%;
   }
 
-  /* Les titres portent l'identité : condensés, serrés, en capitales. */
+  /* Anton n'existe qu'en une seule graisse : toute classe `font-bold` sur un
+     titre ferait fabriquer un faux gras par le navigateur. */
   h1,
   h2 {
     font-family: var(--font-display);
+    font-weight: 400;
     text-transform: uppercase;
-    letter-spacing: 0.01em;
-    line-height: 0.95;
+    letter-spacing: 0.005em;
+    line-height: 0.92;
     text-wrap: balance;
   }
 
-  /* Toute donnée chiffrée s'aligne verticalement : sans ça, une charge qui
-     passe de 40 à 100 kg fait sauter la colonne. */
-  input[type="number"],
+  /* Toute donnée chiffrée en Space Mono, aligné verticalement : sans ça une
+     charge qui passe de 40 à 100 kg fait sauter la colonne. */
   .chiffres {
+    font-family: var(--font-mono);
     font-variant-numeric: tabular-nums;
   }
 
-  /* Anneau de focus visible partout — c'est une exigence d'accessibilité,
-     pas une décoration. */
+  input[type="number"] {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Anneau de focus visible partout — exigence d'accessibilité, pas une
+     décoration. En blanc cassé : il doit rester lisible sur les deux accents. */
   :focus-visible {
-    outline: 2px solid var(--color-accent);
+    outline: 2px solid var(--color-texte);
     outline-offset: 2px;
     border-radius: 2px;
   }
 
   ::selection {
-    background-color: var(--color-accent);
-    color: var(--color-fond);
+    background-color: var(--color-force);
+    color: var(--color-texte);
   }
 
   /* Retire les flèches des champs numériques : en salle, on tape, on ne
@@ -85,36 +89,44 @@
 }
 
 @layer components {
-  /* Étiquette de section : petites capitales espacées, gris atténué. */
+  /* Étiquette technique : Space Mono, espacé, gris. */
   .surtitre {
-    font-family: var(--font-display);
+    font-family: var(--font-mono);
     text-transform: uppercase;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.14em;
     font-size: 0.6875rem;
-    color: var(--color-attenue);
+    color: var(--color-gris);
   }
 
   .carte {
-    background-color: var(--color-surface);
-    border: 1px solid var(--color-bord);
+    background-color: var(--color-carbone);
+    border: 1px solid var(--color-ligne);
     border-radius: 1rem;
   }
 
-  /* Action principale. Le retrait au clic simule un vrai bouton physique. */
+  /* Le dégradé force → flux est la signature de la marque : réservé à
+     l'action principale de l'écran, jamais deux fois sur la même vue. */
+  .degrade {
+    background-image: linear-gradient(90deg, #ff4b2b, #5b7cff);
+  }
+
   .bouton-accent {
-    background-color: var(--color-accent);
-    color: var(--color-fond);
+    background-image: linear-gradient(90deg, #ff4b2b, #5b7cff);
+    background-size: 140% 100%;
+    background-position: 0% 0%;
+    color: var(--color-texte);
     font-family: var(--font-display);
     text-transform: uppercase;
-    letter-spacing: 0.04em;
-    font-weight: 600;
+    letter-spacing: 0.02em;
     border-radius: 0.75rem;
     transition:
-      background-color 200ms ease,
+      background-position 400ms ease,
       transform 120ms ease;
   }
+  /* Le dégradé se déplace au survol au lieu de changer de couleur : le geste
+     reste dans l'identité. */
   .bouton-accent:hover:not(:disabled) {
-    background-color: var(--color-accent-sombre);
+    background-position: 100% 0%;
   }
   .bouton-accent:active:not(:disabled) {
     transform: translateY(1px);
@@ -124,11 +136,11 @@
   }
 
   .bouton-secondaire {
-    border: 1px solid var(--color-bord);
+    border: 1px solid var(--color-ligne);
     color: var(--color-texte);
     font-family: var(--font-display);
     text-transform: uppercase;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.02em;
     border-radius: 0.75rem;
     transition:
       border-color 200ms ease,
@@ -136,8 +148,8 @@
       transform 120ms ease;
   }
   .bouton-secondaire:hover:not(:disabled) {
-    border-color: var(--color-attenue);
-    background-color: var(--color-surface-haute);
+    border-color: var(--color-gris);
+    background-color: var(--color-carbone);
   }
   .bouton-secondaire:active:not(:disabled) {
     transform: translateY(1px);
@@ -147,17 +159,17 @@
   }
 
   .champ {
-    background-color: var(--color-surface);
-    border: 1px solid var(--color-bord);
+    background-color: var(--color-carbone);
+    border: 1px solid var(--color-ligne);
     border-radius: 0.75rem;
     color: var(--color-texte);
     transition: border-color 200ms ease;
   }
   .champ::placeholder {
-    color: var(--color-attenue);
+    color: var(--color-gris);
   }
   .champ:focus {
-    border-color: var(--color-accent);
+    border-color: var(--color-gris);
     outline: none;
   }
 

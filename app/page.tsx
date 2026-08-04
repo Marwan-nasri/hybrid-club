@@ -28,12 +28,12 @@ export default async function Home() {
     <main className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center gap-8 px-5 py-12">
       <div>
         <p className="surtitre">Hybrid Club</p>
-        <h1 className="mt-3 text-6xl font-bold">
+        <h1 className="mt-3 text-6xl">
           Muscu
           <br />
-          <span className="text-accent">+</span> cardio
+          <span className="text-force">+</span> cardio
         </h1>
-        <p className="mt-4 text-sm leading-relaxed text-attenue">
+        <p className="mt-4 text-sm leading-relaxed text-gris">
           Ton programme et ton cadre nutritionnel, construits sur ton profil.
         </p>
       </div>

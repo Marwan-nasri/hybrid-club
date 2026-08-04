@@ -53,7 +53,7 @@ export default async function Dashboard() {
 
         {aujourdhui ? (
           <section>
-            <h1 className="text-6xl font-bold">{aujourdhui.name}</h1>
+            <h1 className="text-6xl">{aujourdhui.name}</h1>
 
             <p className="surtitre mt-4">
               {aujourdhui.type === "muscu"
@@ -66,7 +66,9 @@ export default async function Dashboard() {
               <div className="carte mt-8 flex items-center gap-3 px-5 py-4">
                 <span
                   aria-hidden
-                  className="size-2 shrink-0 rounded-full bg-accent"
+                  className={`size-2 shrink-0 rounded-full ${
+                    aujourdhui.type === "cardio" ? "bg-flux" : "bg-force"
+                  }`}
                 />
                 <p className="text-sm">
                   Séance validée aujourd&apos;hui. Repose-toi.
@@ -83,7 +85,7 @@ export default async function Dashboard() {
           </section>
         ) : (
           <section>
-            <h1 className="text-6xl font-bold text-attenue">Repos</h1>
+            <h1 className="text-6xl text-gris">Repos</h1>
             {suivante && (
               <p className="surtitre mt-4">
                 Prochaine séance {suivante.jour} · {suivante.seance.name}
@@ -92,7 +94,7 @@ export default async function Dashboard() {
           </section>
         )}
 
-        <section className="border-t border-bord pt-6">
+        <section className="border-t border-ligne pt-6">
           <h2 className="surtitre">Dernières séances</h2>
 
           {historique && historique.length > 0 ? (
@@ -100,14 +102,14 @@ export default async function Dashboard() {
               {historique.map((log) => (
                 <li
                   key={log.id}
-                  className="flex items-baseline justify-between gap-4 border-b border-bord/60 py-3 last:border-0"
+                  className="flex items-baseline justify-between gap-4 border-b border-ligne/60 py-3 last:border-0"
                 >
                   <span className="truncate text-sm">
                     {programme.program_json.sessions.find(
                       (s) => s.key === log.session_key,
                     )?.name ?? log.session_key}
                   </span>
-                  <span className="chiffres shrink-0 font-display text-sm uppercase tracking-wider text-attenue">
+                  <span className="chiffres shrink-0 font-display text-sm uppercase tracking-wider text-gris">
                     {new Date(log.completed_at).toLocaleDateString("fr-FR", {
                       day: "2-digit",
                       month: "short",
@@ -118,7 +120,7 @@ export default async function Dashboard() {
             </ul>
           ) : (
             // Un écran vide qui n'explique rien est une occasion perdue.
-            <p className="mt-4 text-sm text-attenue">
+            <p className="mt-4 text-sm text-gris">
               Rien encore. Ta première séance validée apparaîtra ici.
             </p>
           )}

@@ -15,7 +15,7 @@ export default async function Compte() {
   return (
     <main className="mx-auto flex w-full max-w-md flex-col gap-10 px-5 pt-10">
       <header>
-        <h1 className="text-5xl font-bold">Ton compte</h1>
+        <h1 className="text-5xl">Ton compte</h1>
         <p className="surtitre mt-3">
           Membre n°{profil?.member_number ?? "—"} ·{" "}
           {session?.claims.email as string}
@@ -26,7 +26,7 @@ export default async function Compte() {
         <h2 className="surtitre">
           Tes données
         </h2>
-        <p className="mt-3 text-sm text-attenue">
+        <p className="mt-3 text-sm text-gris">
           Tu peux récupérer à tout moment l&apos;intégralité de ce qu&apos;on
           stocke sur toi, dans un fichier JSON.
         </p>
@@ -55,7 +55,7 @@ export default async function Compte() {
         </form>
       </section>
 
-      <section className="border-t border-bord pt-6">
+      <section className="border-t border-ligne pt-6">
         <h2 className="surtitre">
           Zone sensible
         </h2>

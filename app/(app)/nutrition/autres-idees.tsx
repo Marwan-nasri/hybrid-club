@@ -38,7 +38,7 @@ export default function AutresIdees() {
         {enCours ? "On cherche…" : "D'autres idées"}
       </button>
       {erreur && (
-        <p aria-live="polite" className="text-sm text-alerte">
+        <p aria-live="polite" className="text-sm text-force">
           {erreur}
         </p>
       )}

@@ -53,8 +53,8 @@ export default function Attente() {
       <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col justify-center gap-6 px-5">
         <div>
           <p className="surtitre">Échec</p>
-          <h1 className="mt-3 text-5xl font-bold">Ça n&apos;a pas marché</h1>
-          <p className="mt-3 text-sm text-attenue">{erreur}</p>
+          <h1 className="mt-3 text-5xl">Ça n&apos;a pas marché</h1>
+          <p className="mt-3 text-sm text-gris">{erreur}</p>
         </div>
         <button
           type="button"
@@ -76,12 +76,12 @@ export default function Attente() {
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col justify-center gap-10 px-5">
       <div>
         <p className="surtitre">Génération</p>
-        <h1 className="mt-3 text-5xl font-bold">
+        <h1 className="mt-3 text-5xl">
           On construit
           <br />
           ton programme
         </h1>
-        <p className="mt-3 text-sm text-attenue">
+        <p className="mt-3 text-sm text-gris">
           Une trentaine de secondes. Ne ferme pas cette page.
         </p>
       </div>
@@ -104,8 +104,8 @@ export default function Attente() {
                 className="size-1.5 shrink-0 rounded-full transition-colors duration-500"
                 style={{
                   backgroundColor: courante
-                    ? "var(--color-accent)"
-                    : "var(--color-attenue)",
+                    ? "var(--color-force)"
+                    : "var(--color-gris)",
                 }}
               />
               <span

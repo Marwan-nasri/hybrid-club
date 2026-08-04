@@ -28,7 +28,7 @@ export default async function VueProgramme() {
       <div className="cascade flex flex-col gap-10">
         <header>
           <p className="surtitre">Ton programme</p>
-          <h1 className="mt-3 text-5xl font-bold">
+          <h1 className="mt-3 text-5xl">
             {programme.meta.days_per_week} séances
             <br />
             par semaine
@@ -43,12 +43,16 @@ export default async function VueProgramme() {
         {programme.sessions.map((seance, i) => {
           const duree = dureeEstimeeMin(seance);
           return (
-            <section key={seance.key} className="border-t border-bord pt-6">
+            <section key={seance.key} className="border-t border-ligne pt-6">
               <div className="flex items-baseline gap-3">
-                <span className="chiffres font-display text-2xl font-bold text-accent">
+                <span
+                  className={`chiffres font-display text-2xl ${
+                    seance.type === "cardio" ? "text-flux" : "text-force"
+                  }`}
+                >
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <h2 className="text-3xl font-bold">{seance.name}</h2>
+                <h2 className="text-3xl">{seance.name}</h2>
               </div>
 
               <p className="surtitre mt-2">
@@ -64,7 +68,7 @@ export default async function VueProgramme() {
                         className="flex items-baseline justify-between gap-4"
                       >
                         <span className="text-sm">{exercice.name}</span>
-                        <span className="chiffres shrink-0 font-display text-sm uppercase tracking-wider text-attenue">
+                        <span className="chiffres shrink-0 font-display text-sm uppercase tracking-wider text-gris">
                           {exercice.sets} × {exercice.reps}
                         </span>
                       </li>
@@ -74,7 +78,7 @@ export default async function VueProgramme() {
                         <p className="font-display text-base uppercase tracking-wider">
                           {bloc.format}
                         </p>
-                        <p className="mt-1 text-sm text-attenue">
+                        <p className="mt-1 text-sm text-gris">
                           {bloc.content}
                         </p>
                       </li>
