@@ -3,11 +3,9 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { CONFIRMATION } from "./confirmation";
 
 export type EtatSuppression = string | null;
-
-/** Le membre doit écrire ce mot exactement : pas de suppression au clic. */
-export const CONFIRMATION = "SUPPRIMER";
 
 export async function supprimerCompte(
   _etat: EtatSuppression,

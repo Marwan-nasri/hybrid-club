@@ -1,11 +1,8 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import {
-  CONFIRMATION,
-  supprimerCompte,
-  type EtatSuppression,
-} from "./actions";
+import { supprimerCompte, type EtatSuppression } from "./actions";
+import { CONFIRMATION } from "./confirmation";
 
 export default function Suppression() {
   const [ouvert, setOuvert] = useState(false);
