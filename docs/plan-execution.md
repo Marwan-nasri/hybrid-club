@@ -99,7 +99,10 @@ Coche chaque case au fur et à mesure. Ne saute pas d'étape, ne dévie pas du p
 ### Étape 9 — Bêta + lancement (3-4 jours)
 - [ ] 3-5 bêta-testeurs de la commu → parcours complet
 - [ ] Corrections des bugs remontés + ajustement des programmes générés
-- [ ] Landing page de vente finale (distincte de la landing waitlist)
+- [x] Landing page de vente finale (distincte de la landing waitlist)
+      → app/(marketing)/ : promesse, problème, 3 étapes, ce que tu reçois,
+        les 3 tarifs (fondateur en or), FAQ en <details> natifs, disclaimer.
+        Les boutons envoient vers l'inscription tant que Stripe n'existe pas.
 - [ ] Ouverture des 100 places fondateur à la liste d'attente
 
 ---
