@@ -83,7 +83,9 @@ Coche chaque case au fur et à mesure. Ne saute pas d'étape, ne dévie pas du p
 ## SEMAINE 3 — Finitions + lancement
 
 ### Étape 7 — PWA + emails (1 jour)
-- [ ] manifest.json + icônes + écran "installe l'app sur ton écran d'accueil"
+- [x] manifest + icônes générées (app/manifest.ts, app/icon.tsx, app/apple-icon.tsx)
+      → installée, l'app s'ouvre sur /dashboard et non sur la landing
+- [ ] Écran "installe l'app sur ton écran d'accueil"
 - [ ] Emails : bienvenue + programme prêt
 
 ### Étape 8 — Légal + RGPD (1 jour)
