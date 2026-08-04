@@ -40,7 +40,7 @@ export default function Attente() {
           const { erreur } = await reponse.json().catch(() => ({}));
           throw new Error(erreur ?? "La génération a échoué.");
         }
-        router.replace("/");
+        router.replace("/dashboard");
       })
       .catch((e: Error) => setErreur(e.message))
       .finally(() => clearInterval(rotation));

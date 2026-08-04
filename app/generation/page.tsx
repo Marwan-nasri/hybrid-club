@@ -24,7 +24,7 @@ export default async function Generation() {
     .eq("status", "active")
     .maybeSingle();
 
-  if (existant) redirect("/");
+  if (existant) redirect("/dashboard");
 
   return <Attente />;
 }

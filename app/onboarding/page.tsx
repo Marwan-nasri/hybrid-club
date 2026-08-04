@@ -14,7 +14,7 @@ export default async function Onboarding() {
     .eq("id", id)
     .maybeSingle();
 
-  if (profil?.onboarding_completed) redirect("/");
+  if (profil?.onboarding_completed) redirect("/dashboard");
 
   return <Formulaire />;
 }

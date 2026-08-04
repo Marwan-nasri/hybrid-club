@@ -20,7 +20,7 @@ export default async function Home() {
   const { data: programme } = profil?.onboarding_completed
     ? await supabase
         .from("programs")
-        .select("program_json, generated_at")
+        .select("id")
         .eq("user_id", data!.claims.sub)
         .eq("status", "active")
         .maybeSingle()
@@ -71,14 +71,12 @@ export default async function Home() {
               .
             </p>
             {programme ? (
-              // Placeholder jusqu'au dashboard (étape 4) : de quoi vérifier
-              // que le programme est bien en base et lisible.
-              <p className="opacity-80">
-                Ton programme est prêt :{" "}
-                {programme.program_json.sessions.length} séances,{" "}
-                {programme.program_json.weekly_schedule.length} jours par
-                semaine, sur {programme.program_json.meta.weeks} semaines.
-              </p>
+              <Link
+                href="/dashboard"
+                className="flex h-12 items-center justify-center rounded-lg bg-foreground font-medium text-background"
+              >
+                Voir ma séance du jour
+              </Link>
             ) : (
               <Link href="/generation" className="font-medium underline">
                 Générer mon programme

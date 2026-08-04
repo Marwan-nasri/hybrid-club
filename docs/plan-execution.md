@@ -55,10 +55,14 @@ Coche chaque case au fur et à mesure. Ne saute pas d'étape, ne dévie pas du p
 ## SEMAINE 2 — Le produit utilisable
 
 ### Étape 4 — Dashboard + séances (2 jours)
-- [ ] Dashboard /dashboard : séance du jour selon le planning
-- [ ] Écran séance /seance/[id] : liste exercices + saisie séries/reps/charges
-- [ ] Bouton "séance terminée" → insert `workout_logs`
-- [ ] Vue programme complet /programme
+- [x] Dashboard /dashboard : séance du jour selon le planning
+      → repos + prochaine séance si rien n'est prévu, + 3 dernières séances
+- [x] Écran séance /seance/[key] : liste exercices + saisie séries/reps/charges
+      → hors de la nav, champs h-14 et bouton collé en bas (saisie en salle) ;
+        les charges de la dernière fois servent de placeholder
+- [x] Bouton "séance terminée" → insert `workout_logs`
+      → la séance est relue en base, le formulaire ne fournit que les valeurs
+- [x] Vue programme complet /programme
 
 ### Étape 5 — Nutrition (1 jour)
 - [ ] Écran /nutrition : macros en gros + idées de repas en cartes
