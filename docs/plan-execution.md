@@ -116,14 +116,19 @@ Coche chaque case au fur et à mesure. Ne saute pas d'étape, ne dévie pas du p
 - [ ] Emails : bienvenue + programme prêt
 
 ### Étape 8 — Légal + RGPD (1 jour)
-- [ ] Pages mentions légales + confidentialité
+- [x] Pages mentions légales + confidentialité + CGV
+      → gabarit commun dans `app/(marketing)/legal.tsx`, liées depuis le footer,
+        les CGV le sont aussi depuis /abonnement avant paiement
+      → ⚠️ deux points à confirmer par Marwan : la mention « TVA non applicable,
+        art. 293 B » suppose la franchise en base, et le médiateur de la
+        consommation n'est pas encore nommé (adhésion obligatoire pour vendre
+        à des particuliers)
 - [x] /compte : export données (JSON) + suppression compte (cascade)
       → cascade vérifiée : profiles, programs, workout_logs et subscriptions
         tombent tous à 0 après suppression de l'utilisateur
 - [x] Checkbox consentement à l'inscription
       → non pré-cochée, affichée à l'inscription seulement, et revérifiée dans
         l'action serveur : le `required` du navigateur ne prouve rien
-        ⚠️ son lien vers /confidentialite est mort tant que la page n'existe pas
 - [ ] Analytics sans cookies
 
 ### Étape 9 — Bêta + lancement (3-4 jours)

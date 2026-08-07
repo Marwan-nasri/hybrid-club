@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { JOURS_ESSAI, TARIFS } from "@/lib/tarifs";
@@ -111,7 +112,16 @@ export default async function PageAbonnement() {
           Ta carte est enregistrée maintenant mais n&apos;est débitée
           qu&apos;au bout de {JOURS_ESSAI} jours. Paiement sécurisé par Stripe,
           résiliable à tout moment depuis ton compte — si tu arrêtes pendant
-          l&apos;essai, tu n&apos;es pas prélevé du tout.
+          l&apos;essai, tu n&apos;es pas prélevé du tout. En souscrivant, tu
+          acceptes les{" "}
+          <Link
+            href="/cgv"
+            target="_blank"
+            className="text-texte underline underline-offset-2"
+          >
+            conditions générales de vente
+          </Link>
+          .
         </p>
       </div>
     </main>
