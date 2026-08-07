@@ -1,0 +1,77 @@
+<!--
+  Template Supabase — « Confirm signup ».
+  À coller dans Supabase → Authentication → Email Templates → Confirm signup.
+
+  Contraintes propres à l'email, qui expliquent le HTML daté :
+  - mise en page en <table> : Outlook ne sait pas faire de flex ni de grid
+  - CSS en ligne uniquement : Gmail supprime les <style> dans certains cas
+  - pas de webfont : Anton et Space Grotesk ne se chargent pas de façon fiable,
+    on rappelle le display par une capitale espacée en Arial Narrow
+  - le dégradé force → flux est posé en background-image avec un background-color
+    rouge en repli : Outlook ignore le premier et garde le second, qui reste
+    dans la palette
+-->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#0b0d11;margin:0;padding:0;">
+  <tr>
+    <td align="center" style="padding:32px 16px;">
+
+      <!-- Aperçu affiché dans la liste des messages, avant ouverture -->
+      <div style="display:none;max-height:0;overflow:hidden;opacity:0;">
+        Un clic et ton programme t'attend.
+      </div>
+
+      <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;background-color:#14171e;border:1px solid #232833;border-radius:16px;">
+        <tr>
+          <td style="padding:40px 32px;">
+
+            <p style="margin:0;font-family:'Courier New',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#9ba1ae;">
+              Hybrid Club
+            </p>
+
+            <h1 style="margin:14px 0 0;font-family:'Arial Narrow',Arial,sans-serif;font-size:34px;line-height:1.05;letter-spacing:0.5px;text-transform:uppercase;color:#f2f1ec;font-weight:700;">
+              Confirme<br>ton email
+            </h1>
+
+            <p style="margin:20px 0 0;font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.6;color:#9ba1ae;">
+              Bienvenue. Il reste un clic pour ouvrir ton compte et construire
+              ton programme d'entraînement et ton cadre nutritionnel.
+            </p>
+
+            <!-- Bouton : table imbriquée, seule construction cliquable partout -->
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:32px 0 0;">
+              <tr>
+                <td align="center" bgcolor="#ff4b2b" style="background-color:#ff4b2b;background-image:linear-gradient(90deg,#ff4b2b,#5b7cff);border-radius:12px;">
+                  <a href="{{ .ConfirmationURL }}"
+                     style="display:block;padding:17px 36px;font-family:'Arial Narrow',Arial,sans-serif;font-size:17px;letter-spacing:1px;text-transform:uppercase;font-weight:700;color:#ffffff;text-decoration:none;">
+                    Confirmer mon email
+                  </a>
+                </td>
+              </tr>
+            </table>
+
+            <p style="margin:28px 0 0;font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:1.6;color:#9ba1ae;">
+              Le bouton ne fonctionne pas ? Copie ce lien dans ton navigateur :
+            </p>
+            <p style="margin:8px 0 0;font-family:'Courier New',monospace;font-size:12px;line-height:1.5;word-break:break-all;color:#5b7cff;">
+              {{ .ConfirmationURL }}
+            </p>
+
+            <div style="margin:32px 0 0;border-top:1px solid #232833;"></div>
+
+            <p style="margin:20px 0 0;font-family:Helvetica,Arial,sans-serif;font-size:12px;line-height:1.6;color:#9ba1ae;">
+              Ce lien expire dans 24 heures. Si tu n'es pas à l'origine de cette
+              inscription, ignore simplement ce message : aucun compte ne sera
+              ouvert.
+            </p>
+
+          </td>
+        </tr>
+      </table>
+
+      <p style="margin:20px 0 0;font-family:'Courier New',monospace;font-size:11px;letter-spacing:1px;color:#9ba1ae;">
+        HYBRID CLUB · hybridclub.fr
+      </p>
+
+    </td>
+  </tr>
+</table>
