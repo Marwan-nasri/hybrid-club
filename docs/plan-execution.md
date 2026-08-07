@@ -113,7 +113,13 @@ Coche chaque case au fur et à mesure. Ne saute pas d'étape, ne dévie pas du p
 - [x] manifest + icônes générées (app/manifest.ts, app/icon.tsx, app/apple-icon.tsx)
       → installée, l'app s'ouvre sur /dashboard et non sur la landing
 - [ ] Écran "installe l'app sur ton écran d'accueil"
-- [ ] Emails : bienvenue + programme prêt
+- [x] Emails : bienvenue + programme prêt (`lib/emails.ts`)
+      → API Resend en fetch direct, gabarit commun avec
+        `docs/emails/confirmation.html` (à coller dans Supabase, il n'est pas
+        lu par l'app). Un échec d'envoi n'interrompt jamais l'action qui l'a
+        déclenché, et « programme prêt » part après l'insertion en base
+      → ⚠️ sans `RESEND_API_KEY` en environnement, rien ne part et rien ne le
+        signale : c'est voulu, mais ça se vérifie à la main
 
 ### Étape 8 — Légal + RGPD (1 jour)
 - [x] Pages mentions légales + confidentialité + CGV
