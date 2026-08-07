@@ -15,9 +15,18 @@ export default function manifest(): MetadataRoute.Manifest {
     background_color: "#0b0d11",
     theme_color: "#0b0d11",
     categories: ["health", "fitness"],
+    // Le logo est un fichier et non plus une image générée : Next le sert à
+    // /icon.png. Opaque et non transparent, pour deux raisons — Android
+    // rognerait un fond transparent en laissant apparaître le thème du
+    // téléphone, et iOS remplace la transparence par du noir.
     icons: [
-      { src: "/icon", sizes: "512x512", type: "image/png", purpose: "any" },
-      { src: "/icon", sizes: "512x512", type: "image/png", purpose: "maskable" },
+      { src: "/icon.png", sizes: "512x512", type: "image/png", purpose: "any" },
+      {
+        src: "/icon.png",
+        sizes: "512x512",
+        type: "image/png",
+        purpose: "maskable",
+      },
     ],
   };
 }
