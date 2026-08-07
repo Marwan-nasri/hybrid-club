@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { exigerAbonnement } from "@/lib/abonnement";
 import { createClient } from "@/lib/supabase/server";
 import {
   type Programme,
@@ -12,9 +13,8 @@ import {
 export const metadata = { title: "Aujourd'hui" };
 
 export default async function Dashboard() {
+  const userId = await exigerAbonnement();
   const supabase = await createClient();
-  const { data: session } = await supabase.auth.getClaims();
-  const userId = session!.claims.sub;
 
   const { data: programme } = await supabase
     .from("programs")

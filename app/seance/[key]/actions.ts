@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { exigerAbonnement } from "@/lib/abonnement";
 import { createClient } from "@/lib/supabase/server";
 import { type Programme, trouverSeance } from "@/lib/programme";
 
@@ -20,10 +21,10 @@ export async function validerSeance(
 ): Promise<EtatSeance> {
   const cle = String(formData.get("seance_key") ?? "");
 
+  // La page vérifie déjà l'abonnement, mais une action serveur est une URL
+  // appelable directement : la garde doit être des deux côtés.
+  const userId = await exigerAbonnement();
   const supabase = await createClient();
-  const { data: session } = await supabase.auth.getClaims();
-  const userId = session?.claims.sub;
-  if (!userId) redirect("/connexion");
 
   const { data: ligne } = await supabase
     .from("programs")

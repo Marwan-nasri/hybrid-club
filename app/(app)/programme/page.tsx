@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { exigerAbonnement } from "@/lib/abonnement";
 import { createClient } from "@/lib/supabase/server";
 import {
   type Programme,
@@ -10,13 +11,13 @@ import {
 export const metadata = { title: "Programme" };
 
 export default async function VueProgramme() {
+  const userId = await exigerAbonnement();
   const supabase = await createClient();
-  const { data: session } = await supabase.auth.getClaims();
 
   const { data: ligne } = await supabase
     .from("programs")
     .select("program_json, valid_until")
-    .eq("user_id", session!.claims.sub)
+    .eq("user_id", userId)
     .eq("status", "active")
     .maybeSingle<{ program_json: Programme; valid_until: string | null }>();
 

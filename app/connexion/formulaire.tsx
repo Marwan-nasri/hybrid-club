@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useActionState, useState } from "react";
 import { authentifier, type EtatAuth } from "./actions";
 
@@ -98,6 +99,31 @@ export default function Formulaire({
               <span className="text-xs text-gris">8 caractères minimum.</span>
             )}
           </label>
+
+          {/* RGPD : jamais pré-cochée, et rendue seulement à l'inscription —
+              on ne redemande pas son consentement à chaque connexion. */}
+          {inscription && (
+            <label className="flex cursor-pointer items-start gap-3">
+              <input
+                type="checkbox"
+                name="consentement"
+                required
+                className="mt-0.5 size-5 shrink-0 accent-[var(--color-flux)]"
+              />
+              <span className="text-xs leading-relaxed text-gris">
+                J&apos;accepte que mes réponses servent à construire mon
+                programme et mon cadre nutritionnel, et j&apos;ai lu la{" "}
+                <Link
+                  href="/confidentialite"
+                  target="_blank"
+                  className="text-texte underline underline-offset-2"
+                >
+                  politique de confidentialité
+                </Link>
+                .
+              </span>
+            </label>
+          )}
 
           {etat && (
             <p

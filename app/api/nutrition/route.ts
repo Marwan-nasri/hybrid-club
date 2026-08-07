@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { abonnementActif } from "@/lib/abonnement";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { genererIdeesRepas } from "@/lib/anthropic";
@@ -21,6 +22,12 @@ export async function POST() {
   const userId = session?.claims.sub;
   if (!userId) {
     return NextResponse.json({ erreur: "Non connecté." }, { status: 401 });
+  }
+
+  // Chaque clic sur « d'autres idées » est un appel facturé à l'API Anthropic :
+  // il est réservé aux membres, et pas seulement caché derrière une page.
+  if (!(await abonnementActif(userId))) {
+    return NextResponse.json({ erreur: "Abonnement requis." }, { status: 402 });
   }
 
   const [{ data: profil }, { data: programme }] = await Promise.all([

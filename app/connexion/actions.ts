@@ -20,6 +20,16 @@ export async function authentifier(
   const supabase = await createClient();
 
   if (formData.get("mode") === "inscription") {
+    // Le `required` du navigateur ne prouve rien : le consentement RGPD se
+    // vérifie ici, où la requête arrive vraiment.
+    if (formData.get("consentement") !== "on") {
+      return {
+        message:
+          "Coche la case pour accepter le traitement de tes données avant de créer ton compte.",
+        ok: false,
+      };
+    }
+
     const origine = (await headers()).get("origin");
     const { error } = await supabase.auth.signUp({
       email,

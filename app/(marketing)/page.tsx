@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import { JOURS_ESSAI, TARIFS } from "@/lib/tarifs";
 
 export const metadata = {
   // `absolute` court-circuite le gabarit « %s · Hybrid Club » du layout
@@ -55,30 +56,6 @@ const CONTENU = [
   },
 ];
 
-const TARIFS = [
-  {
-    nom: "Fondateur",
-    prix: "49 €",
-    periode: "par an",
-    argument: "Le tarif de lancement, conservé tant que tu restes membre.",
-    fondateur: true,
-  },
-  {
-    nom: "Mensuel",
-    prix: "9,99 €",
-    periode: "par mois",
-    argument: "Sans engagement, tu arrêtes quand tu veux.",
-    fondateur: false,
-  },
-  {
-    nom: "Annuel",
-    prix: "79 €",
-    periode: "par an",
-    argument: "Deux mois offerts par rapport au mensuel.",
-    fondateur: false,
-  },
-];
-
 const FAQ = [
   {
     question: "Il me faut une salle de sport ?",
@@ -94,6 +71,11 @@ const FAQ = [
     question: "C'est un régime ?",
     reponse:
       "Non. Tu reçois un cadre : des calories, des macros, et des idées de repas pour t'en approcher. Rien n'est interdit, il n'y a pas de menu imposé, et tu choisis parmi plusieurs options à chaque repas.",
+  },
+  {
+    question: "Comment marche l'essai gratuit ?",
+    reponse:
+      "Tu enregistres ta carte pour démarrer, mais rien n'est débité pendant les sept premiers jours. Si tu arrêtes avant la fin de l'essai, tu ne paies rien du tout. Sinon, le premier prélèvement se fait au huitième jour, au tarif de la formule choisie.",
   },
   {
     question: "Je peux annuler ?",
@@ -278,6 +260,10 @@ export default async function Landing() {
                 <span className="surtitre">{tarif.periode}</span>
               </p>
 
+              <p className="chiffres mt-2 text-xs text-gris">
+                {JOURS_ESSAI} jours offerts, puis {tarif.prix} {tarif.periode}
+              </p>
+
               <p className="mt-3 text-sm leading-relaxed text-gris">
                 {tarif.argument}
               </p>
@@ -291,9 +277,10 @@ export default async function Landing() {
         >
           {action.libelle}
         </Link>
-        <p className="mt-4 text-center text-xs text-gris">
-          Tu crées ton compte et tu construis ton programme d&apos;abord. Le
-          paiement vient ensuite.
+        <p className="mt-4 text-center text-xs leading-relaxed text-gris">
+          Tu crées ton compte et tu construis ton programme d&apos;abord.
+          Ensuite, {JOURS_ESSAI} jours d&apos;essai : ta carte n&apos;est
+          débitée qu&apos;au terme, et pas du tout si tu arrêtes avant.
         </p>
       </section>
 

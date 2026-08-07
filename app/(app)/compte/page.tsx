@@ -1,16 +1,32 @@
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { deconnexion } from "@/app/connexion/actions";
+import { ouvrirPortail } from "../abonnement/actions";
 import Suppression from "./suppression";
 
 export default async function Compte() {
   const supabase = await createClient();
   const { data: session } = await supabase.auth.getClaims();
 
-  const { data: profil } = await supabase
-    .from("profiles")
-    .select("member_number, created_at")
-    .eq("id", session!.claims.sub)
-    .maybeSingle();
+  const [{ data: profil }, { data: abonnement }] = await Promise.all([
+    supabase
+      .from("profiles")
+      .select("member_number, created_at")
+      .eq("id", session!.claims.sub)
+      .maybeSingle(),
+    supabase
+      .from("subscriptions")
+      .select("plan, status, current_period_end")
+      .eq("user_id", session!.claims.sub)
+      .maybeSingle<{
+        plan: string | null;
+        status: string;
+        current_period_end: string | null;
+      }>(),
+  ]);
+
+  const actif =
+    !!abonnement && ["active", "trialing"].includes(abonnement.status);
 
   return (
     <main className="mx-auto flex w-full max-w-md flex-col gap-10 px-5 pt-10">
@@ -21,6 +37,44 @@ export default async function Compte() {
           {session?.claims.email as string}
         </p>
       </header>
+
+      <section>
+        <h2 className="surtitre">Abonnement</h2>
+        {actif ? (
+          <>
+            <p className="mt-3 text-sm text-gris">
+              Formule {abonnement.plan ?? "en cours"}
+              {abonnement.current_period_end &&
+                ` · prochaine échéance le ${new Date(
+                  abonnement.current_period_end,
+                ).toLocaleDateString("fr-FR")}`}
+              .
+            </p>
+            {/* Moyen de paiement, changement de formule et résiliation : tout
+                passe par le portail Stripe, qu'on n'a pas à réimplémenter. */}
+            <form action={ouvrirPortail} className="mt-4">
+              <button
+                type="submit"
+                className="bouton-secondaire flex h-14 w-full items-center justify-center text-base"
+              >
+                Gérer mon abonnement
+              </button>
+            </form>
+          </>
+        ) : (
+          <>
+            <p className="mt-3 text-sm text-gris">
+              Tu n&apos;as pas d&apos;abonnement en cours.
+            </p>
+            <Link
+              href="/abonnement"
+              className="bouton-secondaire mt-4 flex h-14 items-center justify-center text-base"
+            >
+              Voir les formules
+            </Link>
+          </>
+        )}
+      </section>
 
       <section>
         <h2 className="surtitre">

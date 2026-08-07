@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
+import { exigerAbonnement } from "@/lib/abonnement";
 import { createClient } from "@/lib/supabase/server";
 import { type Programme, trouverSeance } from "@/lib/programme";
 import Formulaire, { type Precedent } from "./formulaire";
@@ -13,10 +14,8 @@ export default async function PageSeance({
 }) {
   const { key } = await params;
 
+  const userId = await exigerAbonnement();
   const supabase = await createClient();
-  const { data: session } = await supabase.auth.getClaims();
-  const userId = session?.claims.sub;
-  if (!userId) redirect("/connexion");
 
   const { data: ligne } = await supabase
     .from("programs")

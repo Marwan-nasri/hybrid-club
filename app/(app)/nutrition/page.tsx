@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { exigerAbonnement } from "@/lib/abonnement";
 import { createClient } from "@/lib/supabase/server";
 import type { Nutrition } from "@/lib/prompts/nutrition-generation";
 import AutresIdees from "./autres-idees";
@@ -15,13 +16,13 @@ function Macro({ valeur, libelle }: { valeur: number; libelle: string }) {
 }
 
 export default async function PageNutrition() {
+  const userId = await exigerAbonnement();
   const supabase = await createClient();
-  const { data: session } = await supabase.auth.getClaims();
 
   const { data: ligne } = await supabase
     .from("programs")
     .select("nutrition_json")
-    .eq("user_id", session!.claims.sub)
+    .eq("user_id", userId)
     .eq("status", "active")
     .maybeSingle<{ nutrition_json: Nutrition }>();
 

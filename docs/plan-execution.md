@@ -21,7 +21,9 @@ Coche chaque case au fur et à mesure. Ne saute pas d'étape, ne dévie pas du p
       → en Next 16 le middleware s'appelle `proxy.ts` / `export function proxy`
 - [x] Page /connexion (inscription + login email)
 - [x] **TEST** : créer un compte → une ligne apparaît dans `profiles`
-- [ ] Push GitHub + deploy Vercel + variables d'env → tester le compte sur l'URL en ligne
+- [x] Push GitHub + deploy Vercel + variables d'env → tester le compte sur l'URL en ligne
+      → `vercel.json` force la région `fra1` : les fonctions ne traitent pas de
+        données personnelles depuis les États-Unis
 
 ### Étape 2 — Onboarding (1 journée)
 - [x] Rediriger vers /onboarding si `onboarding_completed = false`
@@ -72,11 +74,36 @@ Coche chaque case au fur et à mesure. Ne saute pas d'étape, ne dévie pas du p
 
 ### Étape 6 — Paiement Stripe (2 jours)
 - [ ] Produits Stripe : fondateur 49€/an, mensuel 9,99€, annuel 79€
-- [ ] /api/stripe/checkout → redirection Stripe Checkout
-- [ ] /api/stripe/webhook → upsert `subscriptions` (SEULE source de vérité)
-- [ ] Middleware : accès (app) seulement si abonnement actif
-- [ ] Stripe Customer Portal pour gérer/annuler
-- [ ] **TEST** : payer en mode test → statut actif → accès débloqué
+      → à créer dans le dashboard Stripe, puis renseigner en variables d'env
+        (local + Vercel) : `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`,
+        `STRIPE_PRICE_FONDATEUR`, `STRIPE_PRICE_MENSUEL`, `STRIPE_PRICE_ANNUEL`
+- [x] Checkout → action serveur `souscrire` dans `app/(app)/abonnement/actions.ts`
+      → une action serveur plutôt qu'une route API : pas de JS client, et c'est
+        le motif déjà utilisé partout ailleurs. Les tarifs affichés viennent de
+        `lib/tarifs.ts`, partagé avec la landing pour éviter deux prix
+- [x] /api/stripe/webhook → upsert `subscriptions` (SEULE source de vérité)
+      → `statutPourBase()` traduit les statuts Stripe vers la contrainte SQL :
+        tout ce qui n'ouvre pas l'accès retombe sur `canceled`
+- [x] Accès conditionné : `exigerAbonnement()` (`lib/abonnement.ts`) sur
+      dashboard, programme, nutrition, séance + l'action de validation de séance
+      → pas dans le layout (app) : /compte doit rester joignable sans
+        abonnement pour l'export et la suppression RGPD. /api/nutrition renvoie
+        402 sans abonnement — chaque clic est un appel Anthropic facturé
+- [x] Stripe Customer Portal pour gérer/annuler → depuis /compte
+- [x] Essai gratuit de 7 jours (`JOURS_ESSAI` dans `lib/tarifs.ts`)
+      → carte enregistrée dès le départ, 0 € dû le jour J, prélèvement au 8e.
+        Rien à coder côté accès : l'abonnement est en `trialing`, déjà traité
+        comme actif. Un échec de prélèvement au terme passe en `past_due`, que
+        `exigerAbonnement()` referme automatiquement
+- [x] Contrôle : `node --experimental-strip-types --conditions=react-server
+      scripts/test-stripe.ts` (statuts et plans alignés avec le schéma)
+- [x] **TEST** : payer en mode test → statut actif → accès débloqué
+      → cycle complet vérifié le 7 août 2026 : paiement → `active` en base avec
+        le bon plan et la bonne échéance ; résiliation → `canceled` et accès
+        refermé ; essai → 0 € dû, carte quand même collectée.
+        Rejouer : `stripe listen --forward-to localhost:3000/api/stripe/webhook`
+        (le `whsec_` affiché change à chaque session, il doit aller dans
+        `.env.local` — celui du dashboard Stripe est un autre)
 
 ---
 
@@ -93,7 +120,10 @@ Coche chaque case au fur et à mesure. Ne saute pas d'étape, ne dévie pas du p
 - [x] /compte : export données (JSON) + suppression compte (cascade)
       → cascade vérifiée : profiles, programs, workout_logs et subscriptions
         tombent tous à 0 après suppression de l'utilisateur
-- [ ] Checkbox consentement à l'inscription
+- [x] Checkbox consentement à l'inscription
+      → non pré-cochée, affichée à l'inscription seulement, et revérifiée dans
+        l'action serveur : le `required` du navigateur ne prouve rien
+        ⚠️ son lien vers /confidentialite est mort tant que la page n'existe pas
 - [ ] Analytics sans cookies
 
 ### Étape 9 — Bêta + lancement (3-4 jours)
