@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { genererPourProfil } from "@/lib/anthropic";
+import { envoyerProgrammePret } from "@/lib/emails";
 import type { ProfilComplet } from "@/lib/prompts/profil";
 
 // La génération prend 15-30s : au-delà de la limite par défaut de Vercel, la
@@ -84,6 +85,12 @@ export async function POST() {
       { status: 500 },
     );
   }
+
+  // Après l'insertion seulement : annoncer un programme qui n'a pas été
+  // enregistré enverrait le membre vers un écran vide. L'envoi n'échoue jamais
+  // bruyamment, la génération est déjà acquise à ce stade.
+  const email = session?.claims.email as string | undefined;
+  if (email) await envoyerProgrammePret(email, profil.days_per_week);
 
   return NextResponse.json({ ok: true });
 }

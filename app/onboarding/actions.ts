@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { envoyerBienvenue } from "@/lib/emails";
 import { createClient } from "@/lib/supabase/server";
 
 export type EtatOnboarding = string | null;
@@ -53,7 +54,9 @@ export async function enregistrerProfil(
       onboarding_completed: true,
     })
     .eq("id", id)
-    .select("id");
+    // Le numéro de membre est attribué par un trigger au passage de
+    // `onboarding_completed` à true : on le relit ici pour l'email.
+    .select("id, member_number");
 
   if (error) {
     return "Certaines réponses ne sont pas valides. Vérifie et réessaie.";
@@ -64,6 +67,9 @@ export async function enregistrerProfil(
   if (!maj?.length) {
     return "Ton profil est introuvable. Déconnecte-toi puis reconnecte-toi.";
   }
+
+  const email = session.claims.email as string | undefined;
+  if (email) await envoyerBienvenue(email, maj[0].member_number);
 
   redirect("/generation");
 }
