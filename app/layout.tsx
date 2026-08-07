@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/next";
 import type { Metadata, Viewport } from "next";
 import { Anton, Space_Grotesk, Space_Mono } from "next/font/google";
 import "./globals.css";
@@ -60,6 +61,11 @@ export default function RootLayout({
           }}
         />
         {children}
+        {/* Mesure d'audience sans cookie ni identifiant persistant : c'est ce
+            qui la dispense de bandeau de consentement, et c'est la seule
+            raison de l'avoir choisie. Les pages vues restent chez Vercel,
+            aucune donnée n'est croisée avec le profil du membre. */}
+        <Analytics />
       </body>
     </html>
   );

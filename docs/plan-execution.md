@@ -139,7 +139,11 @@ Coche chaque case au fur et à mesure. Ne saute pas d'étape, ne dévie pas du p
 - [x] Checkbox consentement à l'inscription
       → non pré-cochée, affichée à l'inscription seulement, et revérifiée dans
         l'action serveur : le `required` du navigateur ne prouve rien
-- [ ] Analytics sans cookies
+- [x] Analytics sans cookies
+      → Vercel Web Analytics (`<Analytics />` dans `app/layout.tsx`) : pas de
+        cookie ni d'identifiant persistant, donc pas de bandeau de consentement
+        à afficher. La politique de confidentialité le mentionne nommément
+      → ⚠️ à activer dans Vercel → onglet Analytics, sinon rien n'est collecté
 
 ### Étape 9 — Bêta + lancement (3-4 jours)
 - [ ] 3-5 bêta-testeurs de la commu → parcours complet

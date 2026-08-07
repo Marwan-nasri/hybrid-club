@@ -82,7 +82,8 @@ export default function Confidentialite() {
           <strong className="text-texte">Supabase</strong> — base de données et
           comptes (UE, Francfort).
           <br />
-          <strong className="text-texte">Vercel</strong> — hébergement du site.
+          <strong className="text-texte">Vercel</strong> — hébergement du site
+          et mesure d&apos;audience sans cookie.
           <br />
           <strong className="text-texte">Anthropic</strong> — génération des
           programmes. Ton profil lui est transmis sans ton email ni ton nom, et
@@ -112,12 +113,23 @@ export default function Confidentialite() {
         </p>
       </Section>
 
-      <Section titre="Cookies">
+      <Section titre="Cookies et mesure d'audience">
         <p>
           Uniquement des cookies techniques, ceux qui te gardent connecté. Pas
-          de cookie publicitaire, pas de traceur tiers, pas de Google Analytics.
-          C&apos;est pour cette raison qu&apos;aucune bannière de consentement
-          ne t&apos;est imposée : il n&apos;y a rien à accepter.
+          de cookie publicitaire, pas de Google Analytics, pas de revente de ta
+          navigation.
+        </p>
+        <p>
+          On mesure la fréquentation du site avec Vercel Web Analytics, qui
+          compte les pages vues sans déposer de cookie et sans créer
+          d&apos;identifiant permettant de te suivre d&apos;un jour sur
+          l&apos;autre. Ces statistiques sont agrégées et ne sont jamais
+          rapprochées de ton compte ni de ton profil.
+        </p>
+        <p>
+          C&apos;est parce qu&apos;aucun traceur ne dépose de cookie
+          qu&apos;aucune bannière de consentement ne t&apos;est imposée : il
+          n&apos;y a rien à accepter.
         </p>
       </Section>
 
