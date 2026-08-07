@@ -1,15 +1,15 @@
 <!--
   Template Supabase — « Confirm signup ».
   À coller dans Supabase → Authentication → Email Templates → Confirm signup.
+  Garder {{ .ConfirmationURL }} tel quel : c'est Supabase qui le remplace.
 
   Contraintes propres à l'email, qui expliquent le HTML daté :
   - mise en page en <table> : Outlook ne sait pas faire de flex ni de grid
   - CSS en ligne uniquement : Gmail supprime les <style> dans certains cas
   - pas de webfont : Anton et Space Grotesk ne se chargent pas de façon fiable,
     on rappelle le display par une capitale espacée en Arial Narrow
-  - le dégradé force → flux est posé en background-image avec un background-color
-    rouge en repli : Outlook ignore le premier et garde le second, qui reste
-    dans la palette
+  - chaque dégradé est doublé d'un background-color rouge : Outlook ignore le
+    premier et garde le second, qui reste dans la palette
 -->
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#0b0d11;margin:0;padding:0;">
   <tr>
@@ -17,24 +17,31 @@
 
       <!-- Aperçu affiché dans la liste des messages, avant ouverture -->
       <div style="display:none;max-height:0;overflow:hidden;opacity:0;">
-        Un clic et ton programme t'attend.
+        Un clic, et on construit ton programme.
       </div>
 
-      <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;background-color:#14171e;border:1px solid #232833;border-radius:16px;">
-        <tr>
-          <td style="padding:40px 32px;">
+      <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;background-color:#14171e;border:1px solid #232833;border-radius:16px;overflow:hidden;">
 
-            <p style="margin:0;font-family:'Courier New',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#9ba1ae;">
+        <!-- Le dégradé force → flux, signature de la marque -->
+        <tr>
+          <td height="5" bgcolor="#ff4b2b" style="height:5px;line-height:5px;font-size:0;background-color:#ff4b2b;background-image:linear-gradient(90deg,#ff4b2b,#5b7cff);">&nbsp;</td>
+        </tr>
+
+        <tr>
+          <td style="padding:44px 32px 40px;">
+
+            <p style="margin:0;font-family:'Courier New',monospace;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:#9ba1ae;">
               Hybrid Club
             </p>
 
-            <h1 style="margin:14px 0 0;font-family:'Arial Narrow',Arial,sans-serif;font-size:34px;line-height:1.05;letter-spacing:0.5px;text-transform:uppercase;color:#f2f1ec;font-weight:700;">
-              Confirme<br>ton email
+            <h1 style="margin:16px 0 0;font-family:'Arial Narrow',Arial,sans-serif;font-size:42px;line-height:0.98;letter-spacing:0.5px;text-transform:uppercase;color:#f2f1ec;font-weight:700;">
+              Plus qu&rsquo;un<br>clic
             </h1>
 
-            <p style="margin:20px 0 0;font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.6;color:#9ba1ae;">
-              Bienvenue. Il reste un clic pour ouvrir ton compte et construire
-              ton programme d'entraînement et ton cadre nutritionnel.
+            <p style="margin:22px 0 0;font-family:Helvetica,Arial,sans-serif;font-size:16px;line-height:1.6;color:#9ba1ae;">
+              Confirme ton adresse et ton compte est ouvert. On construit
+              ensuite ton programme à partir de tes réponses &mdash; ça prend
+              une trentaine de secondes.
             </p>
 
             <!-- Bouton : table imbriquée, seule construction cliquable partout -->
@@ -42,25 +49,57 @@
               <tr>
                 <td align="center" bgcolor="#ff4b2b" style="background-color:#ff4b2b;background-image:linear-gradient(90deg,#ff4b2b,#5b7cff);border-radius:12px;">
                   <a href="{{ .ConfirmationURL }}"
-                     style="display:block;padding:17px 36px;font-family:'Arial Narrow',Arial,sans-serif;font-size:17px;letter-spacing:1px;text-transform:uppercase;font-weight:700;color:#ffffff;text-decoration:none;">
+                     style="display:block;padding:18px 40px;font-family:'Arial Narrow',Arial,sans-serif;font-size:18px;letter-spacing:1.2px;text-transform:uppercase;font-weight:700;color:#ffffff;text-decoration:none;">
                     Confirmer mon email
                   </a>
                 </td>
               </tr>
             </table>
 
-            <p style="margin:28px 0 0;font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:1.6;color:#9ba1ae;">
-              Le bouton ne fonctionne pas ? Copie ce lien dans ton navigateur :
+            <!-- Ce qui attend le membre derrière le clic -->
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:36px 0 0;background-color:#0b0d11;border:1px solid #232833;border-radius:12px;">
+              <tr>
+                <td style="padding:22px 24px;">
+                  <p style="margin:0 0 16px;font-family:'Courier New',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#9ba1ae;">
+                    Ce qui t&rsquo;attend
+                  </p>
+
+                  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                    <tr>
+                      <td width="34" valign="top" style="font-family:'Courier New',monospace;font-size:12px;color:#ff4b2b;padding-bottom:12px;">01</td>
+                      <td valign="top" style="font-family:Helvetica,Arial,sans-serif;font-size:14px;line-height:1.5;color:#f2f1ec;padding-bottom:12px;">
+                        Quelques questions sur ton objectif et ton matériel
+                      </td>
+                    </tr>
+                    <tr>
+                      <td width="34" valign="top" style="font-family:'Courier New',monospace;font-size:12px;color:#f5c55a;padding-bottom:12px;">02</td>
+                      <td valign="top" style="font-family:Helvetica,Arial,sans-serif;font-size:14px;line-height:1.5;color:#f2f1ec;padding-bottom:12px;">
+                        Ton programme muscu + cardio et tes repères nutrition
+                      </td>
+                    </tr>
+                    <tr>
+                      <td width="34" valign="top" style="font-family:'Courier New',monospace;font-size:12px;color:#5b7cff;">03</td>
+                      <td valign="top" style="font-family:Helvetica,Arial,sans-serif;font-size:14px;line-height:1.5;color:#f2f1ec;">
+                        Tes séances sur ton téléphone, charges comprises
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+
+            <p style="margin:30px 0 0;font-family:Helvetica,Arial,sans-serif;font-size:12px;line-height:1.6;color:#9ba1ae;">
+              Le bouton ne fonctionne pas ? Copie ce lien :
             </p>
-            <p style="margin:8px 0 0;font-family:'Courier New',monospace;font-size:12px;line-height:1.5;word-break:break-all;color:#5b7cff;">
+            <p style="margin:6px 0 0;font-family:'Courier New',monospace;font-size:11px;line-height:1.5;word-break:break-all;color:#5b7cff;">
               {{ .ConfirmationURL }}
             </p>
 
-            <div style="margin:32px 0 0;border-top:1px solid #232833;"></div>
+            <div style="margin:30px 0 0;border-top:1px solid #232833;"></div>
 
             <p style="margin:20px 0 0;font-family:Helvetica,Arial,sans-serif;font-size:12px;line-height:1.6;color:#9ba1ae;">
-              Ce lien expire dans 24 heures. Si tu n'es pas à l'origine de cette
-              inscription, ignore simplement ce message : aucun compte ne sera
+              Ce lien expire dans 24 heures. Si tu n&rsquo;es pas à l&rsquo;origine
+              de cette inscription, ignore ce message : aucun compte ne sera
               ouvert.
             </p>
 
@@ -68,8 +107,8 @@
         </tr>
       </table>
 
-      <p style="margin:20px 0 0;font-family:'Courier New',monospace;font-size:11px;letter-spacing:1px;color:#9ba1ae;">
-        HYBRID CLUB · hybridclub.fr
+      <p style="margin:22px 0 0;font-family:'Courier New',monospace;font-size:10px;letter-spacing:1.5px;color:#9ba1ae;">
+        HYBRID CLUB &middot; HYBRIDCLUB.FR
       </p>
 
     </td>
