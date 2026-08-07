@@ -43,10 +43,10 @@ export async function authentifier(
       console.error("[inscription]", error.code, error.message);
       return { message: messageInscription(error.code, error.message), ok: false };
     }
-    return {
-      message: "Compte créé. Clique sur le lien qu'on vient de t'envoyer par email.",
-      ok: true,
-    };
+    // Un écran dédié plutôt qu'un message sous le formulaire : c'est le moment
+    // où l'on quitte l'app pour sa boîte mail, et où il faut pouvoir redemander
+    // l'email si rien n'arrive.
+    redirect(`/connexion/verification?email=${encodeURIComponent(email)}`);
   }
 
   const { error } = await supabase.auth.signInWithPassword({
