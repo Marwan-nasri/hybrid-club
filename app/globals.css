@@ -173,6 +173,19 @@
     outline: none;
   }
 
+  /* Invitation à installer l'app : elle disparaît d'elle-même une fois
+     l'installation faite, puisque l'app s'ouvre alors hors du navigateur.
+     En CSS et non en JavaScript : aucun état à gérer, rien à hydrater, et
+     le bandeau n'apparaît jamais l'espace d'un rendu chez qui l'a déjà. */
+  .invite-installation {
+    display: block;
+  }
+  @media (display-mode: standalone), (display-mode: minimal-ui) {
+    .invite-installation {
+      display: none;
+    }
+  }
+
   /* Entrée en cascade : les éléments arrivent décalés plutôt que d'un bloc. */
   .cascade > * {
     animation: monte 420ms cubic-bezier(0.16, 1, 0.3, 1) backwards;

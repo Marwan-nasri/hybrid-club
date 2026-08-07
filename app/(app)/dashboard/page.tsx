@@ -125,6 +125,31 @@ export default async function Dashboard() {
             </p>
           )}
         </section>
+
+        {/* En bas : la séance du jour passe avant. Le bandeau s'efface tout
+            seul une fois l'app installée — voir `.invite-installation`. */}
+        <section className="invite-installation carte mt-6 p-5">
+          <p className="surtitre">Sur ton écran d&apos;accueil</p>
+          <p className="mt-3 text-sm leading-relaxed text-gris">
+            Installe Hybrid Club sur ton téléphone : l&apos;app s&apos;ouvre
+            directement sur ta séance du jour, sans passer par le navigateur.
+          </p>
+          <dl className="mt-4 flex flex-col gap-2 text-sm leading-relaxed">
+            <div>
+              <dt className="inline text-texte">iPhone —</dt>{" "}
+              <dd className="inline text-gris">
+                bouton Partager en bas de Safari, puis « Sur l&apos;écran
+                d&apos;accueil ».
+              </dd>
+            </div>
+            <div>
+              <dt className="inline text-texte">Android —</dt>{" "}
+              <dd className="inline text-gris">
+                menu ⋮ de Chrome, puis « Installer l&apos;application ».
+              </dd>
+            </div>
+          </dl>
+        </section>
       </div>
     </main>
   );
