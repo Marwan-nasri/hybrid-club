@@ -8,6 +8,16 @@ export const metadata = {
     "Formules, essai gratuit, reconduction, résiliation et droit de rétractation.",
 };
 
+/**
+ * Médiateur de la consommation. L'adhésion à un organisme agréé est obligatoire
+ * pour vendre à des particuliers, et ses coordonnées doivent figurer ici.
+ *
+ * À remplir dès l'adhésion signée — et pas avant : annoncer un médiateur
+ * auquel on n'a pas adhéré serait pire que la formulation d'attente, puisqu'un
+ * membre pourrait le saisir pour rien.
+ */
+const MEDIATEUR: { nom: string; adresse: string; site: string } | null = null;
+
 export default function CGV() {
   return (
     <PageLegale
@@ -133,16 +143,40 @@ export default function CGV() {
         <p>Le service est réservé aux personnes majeures.</p>
       </Section>
 
-      <Section titre="Litiges">
+      <Section titre="Médiation et litiges">
         <p>
-          En cas de désaccord, écris-nous d&apos;abord : la plupart des
-          situations se règlent directement. À défaut, tu peux recourir
-          gratuitement à un médiateur de la consommation, ou saisir la
-          plateforme européenne de règlement en ligne des litiges.
+          En cas de désaccord, écris-nous d&apos;abord à contact@hybridclub.fr :
+          la plupart des situations se règlent directement.
         </p>
-        <p>
-          Ces conditions sont soumises au droit français.
-        </p>
+        {MEDIATEUR ? (
+          <>
+            <p>
+              Si notre réponse ne te satisfait pas, tu peux saisir gratuitement
+              notre médiateur de la consommation, dans un délai d&apos;un an à
+              compter de ta réclamation écrite :
+            </p>
+            <p>
+              {MEDIATEUR.nom}
+              <br />
+              {MEDIATEUR.adresse}
+              <br />
+              <a
+                href={MEDIATEUR.site}
+                className="text-texte underline underline-offset-2"
+              >
+                {MEDIATEUR.site.replace(/^https?:\/\//, "")}
+              </a>
+            </p>
+          </>
+        ) : (
+          <p>
+            Si notre réponse ne te satisfait pas, tu peux saisir gratuitement un
+            médiateur de la consommation dans un délai d&apos;un an à compter de
+            ta réclamation écrite. Ses coordonnées te seront communiquées sur
+            simple demande à contact@hybridclub.fr.
+          </p>
+        )}
+        <p>Ces conditions sont soumises au droit français.</p>
       </Section>
     </PageLegale>
   );
